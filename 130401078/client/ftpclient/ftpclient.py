@@ -20,17 +20,26 @@ DEFAULT_HOST = "127.0.0.1"
 
 
 class FTPClient(object):
+    
     def __init__(self,sock,data):
         self.sock = sock
         self.data = data
         self.clisocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    def put(self):
+        
+        
+    def PUT(self):
         self.clisocket.sendto(bytes(self.data+"\n","utf-8"),self.sock)
-    def get(self):
+        
+        
+        
+    def GET(self):
         self.received = str(self.clisocket.recv(1024),"utf-8")
         print("Sent: {}".format(self.data))
         print("Received: {}".format(self.received))
         
+
+    def LIST(self):
+        pass
 
 def main(argv):
     
@@ -50,4 +59,5 @@ def main(argv):
 
 
 if __name__=="__main__":
-    main(sys.argv[1:])    
+    #main(sys.argv[1:]) 
+    print("All good.")
