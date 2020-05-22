@@ -14,7 +14,7 @@ class FTPServer:
         
         
         self.ServerSocket = None  ## socket daha initialize edilmemiş
-        self.connectedClientDict = {("127.0.0.1",7000):False} ## Bağlı client adresleri, True ise yetkili
+        self.connectedClientDict = {("127.0.0.1",7000):False} ## Bağlı client adresleri, True ise işlem yapabilir.
         
         ##İnstance oluşturulduğu anda socket oluşturup dinlenmeye başlıyor.
         self.create_socket()
@@ -68,10 +68,14 @@ class FTPServer:
                     self.RETR(data,address)
                     continue
 
-                send_msg_to_client("501 SYNTAX HATASI ? SERVER BU KOMUTU BULAMADI")
+                self.send_msg_to_client("501",address)
+                
+                if(data.command == "QUIT"): ## Socketi kapat programdan çık
+                    self.QUIT()
+                    break
                 
             except:
-                send_msg_to_client("500-* ? KOMUT İŞLETİLEMEDİ VEYA BİR HATA OLUŞTU")
+                self.send_msg_to_client("500",address)
                 
                 
     
@@ -84,10 +88,10 @@ class FTPServer:
         İlerideki işlemlerde IP adresinin kayıtlı olup olmadığını kontrol edeceğim."""
         try:
             self.connectedClientDict[address] = True
-            self.send_msg_to_client("230 LOGGED IN ",address)
+            self.send_msg_to_client("230",address)
             
         except:
-            self.send_msg_to_client("530 NOT LOGGED IN",address)
+            self.send_msg_to_client("530",address)
             
             
             
@@ -125,28 +129,74 @@ class FTPServer:
         address parametresi = > CLİENT'in adresi
         data parametresi = > dosya adı ve ek veri
         
-        önce böyle bir dosyanın bulunup bulunamadığınına bakalım,
+        önce client AUTH isteği yollamış mı ona bakalım.
+        ardından böyle bir dosyanın bulunup bulunamadığınına bakalım,
         ardından dosyanın içeriğinin buffer değerini aşıp aşmadığına bakalım, aşıyorsa 
         """
+        if(address not in self.connectedClientDict or self.connectedClientDict[address]==False):
+            self.send_msg_to_client("530",address)
+            return
+        
         try:
-            file_path = self.PATH + "\serverside_folder\\" + data.data ## istenilen dosyanın konumu
+            file_name = data.data ## istenen dosyanın adı
+            file_path = self.PATH + "\serverside_folder\\" + file_name ## istenilen dosyanın konumu
             
             if(path.exists(file_path) == False): ## öyle bir dosya yoksa
-                send_msg_to_client("550 Dosya bulunamadı ?")
+                self.send_msg_to_client("550",address)
                 return
             
             if(os.path.getsize(file_path) < self.BUFFERSIZE): ## dosyanın içeriği bufferden küçükse yolluyoruz
-                ## burada yolla
-                pass
                 
+                f = open(file_path,'rb') ## dosyanın içeriğini okuduk
+                newP = datapacket.DataPacket("RETRANSWER",0,"",0) 
+                newP.data = f.read() ## dosyanın içini paketin data kısmına yerleştiriyoruz.
+                f.close()
+                
+                pickled_data = pickle.dumps(newP) ## pickle ile karşı  tarafın aynı şekilde açabileceği hale getirdik.
+                
+                self.ServerSocket.sendto(pickled_data,address) ## yollandı
+                
+                self.send_msg_to_client("200")
         except:
-            send_msg_to_client("502",address)
+            self.send_msg_to_client("502",address)
             
             
         
     
-    def STOR(self):
-        pass
+    def STOR(self,address,data):
+        """Bu fonksiyon ile client servere dosya yüklüyor, bu fonksiyon iki fazda çalışacak
+        ilk paket yollandığında clientin yollamak istediği dosya adında bir dosya oluşturulacak
+        ikinci pakette client dosyanın içeriğini yollayacak."""
+        if(address not in self.connectedClientDict or self.connectedClientDict[address]==False):
+            self.send_msg_to_client("530",address) 
+            return
+        
+        try:
+            file_name  = self.data.data
+            file_path = self.PATH + "\serverside_folder\\" + file_name
             
-    
+            if(path.exists(file_path) == True): ## böyle bir dosya zaten varsa
+                self.send_msg_to_client("553",address)
+                return
+
+            f = open(file_path,wb) ## client dosyasını oluşturduk içeriğini clientten alıp doldurmalıyız.
+            
+            self.send_msg_to_client("150",address) ## cliente 150 ile işlemi devam ettirmesi gerektiğini söyledik
+            
+            client_msg = self.ServerSocket.recvfrom(self.BUFFERSIZE)
+                
+            data =client_msg[0]## data
+            address = client_msg[1] ## ip&port
+            
+            data = pickle.loads(data) ## veriyi DataPacket haline dönüşütürdük
+            
+            f.write(data.data) ## DataPacket data kısmını dosyaya yazdık
+
+            f.close()
+        except:
+            send_msg_to_client("500",address)
+        
+    def QUIT(self):
+        self.ServerSocket.shutdown()
+        self.ServerSocket.close()
 s = FTPServer()

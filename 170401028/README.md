@@ -1,46 +1,38 @@
-# Project Title
+# UDP kullanan FTP sunucu ve istemci
 
 ## Table of Contents
 
-- [About](#about)
-- [Getting Started](#getting_started)
-- [Usage](#usage)
-- [Contributing](../CONTRIBUTING.md)
+- [Hakkında](#about)
+- [Yararlı bağlantılar](#getting_started)
+- [Çözülmeyi bekleyen problemler](#problemler)
 
-## About <a name = "about"></a>
+## Hakkında <a name = "about"></a>
 
-Write about 1-2 paragraphs describing the purpose of your project.
+veri transferini UDP protokolü ile gerçekleştiren basit bir FTP sunucu ve istemcisi.
 
-## Getting Started <a name = "getting_started"></a>
+Python 3 ile yazıldı, herhangi bir paket bağımlılığı yok
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See [deployment](#deployment) for notes on how to deploy the project on a live system.
+Necdet Yücel (@nyucel) hocamızın Veri haberleşmesi dersi vize ödevi için verdiği ödevin işlenmesidir.
 
-### Prerequisites
+## Yararlı bağlantılar <a name = "getting_started"></a>
 
-What things you need to install the software and how to install them.
+### ftp komutları ve dönüş değerleri
+https://en.wikipedia.org/wiki/List_of_FTP_commands 
+https://en.wikipedia.org/wiki/List_of_FTP_server_return_codes
 
-```
-Give examples
-```
+### Başlamadan önce faydalandıklarım 
 
-### Installing
+https://pythontic.com/modules/socket/udp-client-server-example  UDP server client örneği
 
-A step by step series of examples that tell you how to get a development env running.
+https://realpython.com/python-sockets/ pythonda socket programlama 
 
-Say what the step will be
+https://dzone.com/articles/tcpdump-learning-how-read-udp tcpdump ile udp paketlerini okurken
 
-```
-Give the example
-```
+.
 
-And repeat
+.
 
-```
-until finished
-```
 
-End with an example of getting some data out of the system or using it for a little demo.
 
-## Usage <a name = "usage"></a>
+## Çözülmeyi bekleyen problemler <a name = "problemler"></a>
 
-Add notes about how to use the system.
