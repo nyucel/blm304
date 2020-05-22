@@ -19,7 +19,7 @@ class FTPServer:
         ##İnstance oluşturulduğu anda socket oluşturup dinlenmeye başlıyor.
         self.create_socket()
         self.listen()
-    
+
     
     def send_msg_to_client(self,message,clientAdress):
         """Client'e mesaj gönderme"""
@@ -52,6 +52,7 @@ class FTPServer:
                 address = client_msg[1] ## ip&port
                 data = pickle.loads(data) ## datayı çözüp datapacket tipine getiriyoruz.
                 
+                print(data.command)
                 if(data.command == "AUTH"): ## BAĞLANTI KUR
                     self.AUTH(address)
                     continue
@@ -67,12 +68,10 @@ class FTPServer:
                 if(data.command == "RETR"): ## SUNUCUDAN DOSYANIN BIR KOPYASINI YERELİNE İNDİR(GET)
                     self.RETR(data,address)
                     continue
-
-                self.send_msg_to_client("501",address)
                 
-                if(data.command == "QUIT"): ## Socketi kapat programdan çık
-                    self.QUIT()
-                    break
+                if(data.command == "QUIT"): ## Kullanıcının adresini dict den çıkart
+                    self.QUIT(address)
+                    continue
                 
             except:
                 self.send_msg_to_client("500",address)
@@ -101,17 +100,19 @@ class FTPServer:
 
         
     def NLST(self,address):
-        """DIZINDEKİ DOSYALARI CLIENTE YOLLAYACAK FONKSIYON"""
+        """DIZINDEKİ DOSYALARIN ADLARINI CLIENTE YOLLAYACAK FONKSIYON"""
         """Önce dosyaları listeledim, sonra kullanıcıya yollanabilecek düzgün görünümlü bir text oluşturdum"""
         """Sonra o texti kullanıcıya yolladım."""
         try:
-            files_in_directory = os.listdir('serverside_folder') 
+            
+            files_in_directory = os.listdir('170401028/serverside_folder') 
             text = ""
-        
+            
             for i in range(len(files_in_directory)): 
                 text += str(i+1) + " . " + str(files_in_directory[i]) + "\n"
             
-            self.send_text_msg(text,address)
+            self.send_msg_to_client(text,address)
+            
             
             self.send_text_msg("212",address)
             
@@ -195,8 +196,23 @@ class FTPServer:
             f.close()
         except:
             send_msg_to_client("500",address)
+    
+    
+    def QUIT(self,address):
+        """Kullanıcının ip&port bilgisini dictionary den çıkartıyoruz
+        Disconnect olmuş oluyor."""
+        try:
+            disconnected = self.connectedClientDict.pop(address)
+            print(disconnected + "Adresli bağlantı disconnect oldu")
+            send_msg_to_client("231",address)
+        except:
+            send_msg_to_client("500",address)
         
-    def QUIT(self):
+    def close_server_and_abort_program(self):
+        """soketi kapa while döngüsünden çık"""
         self.ServerSocket.shutdown()
         self.ServerSocket.close()
+
 s = FTPServer()
+
+
