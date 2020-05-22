@@ -1,5 +1,6 @@
 import socket
-
+import datapacket
+import pickle
  
 
 msgFromClient       = "LIST"
@@ -11,7 +12,8 @@ serverAddressPort   = ("127.0.0.1", 42)
 bufferSize          = 1024
 
  
-
+mesaj = datapacket.DataPacket("asdas","asdfas","asdasd","asdasd")
+yollnacakmesaj = pickle.dumps(mesaj)
 # Create a UDP socket at client side
 
 UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
@@ -20,7 +22,7 @@ UDPClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
 
 # Send to server using created UDP socket
 
-UDPClientSocket.sendto(bytesToSend, serverAddressPort)
+UDPClientSocket.sendto(yollnacakmesaj, serverAddressPort)
 
 
  
