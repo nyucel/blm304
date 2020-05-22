@@ -1,15 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Mon May 18 10:02:01 2020
+date Mon May 18 10:02:01 2020
 
-@author: trabdlkarim
+@author Abdoul Karim TOURE
+@contact contact@trabdlkarim.com
+@copyright Copyright 2020, Abdoul Karim TOURE
+@license GPL v3.0 or Later
+@version 1.0.1
+@status Development
 """
 
 
 import sys
 
-import ftpclient.ftpshell as shell
+import ftpclient.myftpshell as shell
 
 
 def main(argv):
@@ -18,4 +23,4 @@ def main(argv):
 
 
 if __name__ =="__main__":
-    main(sys.argv)
+    main(sys.argv[1:])
