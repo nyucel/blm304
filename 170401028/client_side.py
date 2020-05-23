@@ -16,7 +16,7 @@ class Client:
         
         self.create_socket()
         self.CONNECT()
-        self.LIST()
+        self.GET("sample")
         
     def create_socket(self):
         """Client side UDP Socketi oluşturur"""
@@ -46,7 +46,16 @@ class Client:
         Serverside da NLST fonksiyonunu tetikler"""
         server_response = self.create_and_send_packet(command="NLST")
         print(server_response)
+    
+    def GET(self,filename):
+        server_response   = self.create_and_send_packet(command="RETR",data=filename)
         
+        with open(filename, 'wb') as the_file:
+            the_file.write(server_response.data)
+
+    def TEST(self,echo):
+        server_response = self.create_and_send_packet(command="TEST",data=echo)
+        print(server_response.data)
     
     def create_and_send_packet(self,command = "" , seqNumber = 0 , data = "" , checksum = 0):
         """Verilen parametreler ile Sunucuya UDP paketi yolluyor,
@@ -61,17 +70,16 @@ class Client:
         self.ClientSocket.sendto(pickled_datapacket,self.server_address)
         
         ## CEVABI DÖNDÜR
-        
+        server_response = self.ClientSocket.recvfrom(self.BUFFERSIZE)[0]
         try:
             ## encoded ise 
-            server_response = self.ClientSocket.recvfrom(self.BUFFERSIZE)[0]
             response_data = server_response.decode(encoding = "UTF-8")
             return response_data
         
         except:
             ## pickled ise
-            server_response = self.ClientSocket.recvfrom(self.BUFFERSIZE)[0]
-            print(server_response)
+            response_data  = pickle.loads(server_response)
+            return response_data
             
             
         

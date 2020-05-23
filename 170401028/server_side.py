@@ -45,36 +45,39 @@ class FTPServer:
         while(True):
             """ Clientden gelen mesajı okuyacağım ve datanın command değerine göre
             belirli fonksiyonlara tabi tutulacak """
-            try:
-                client_msg = self.ServerSocket.recvfrom(self.BUFFERSIZE)
-                
-                data =client_msg[0]## data
-                address = client_msg[1] ## ip&port
-                data = pickle.loads(data) ## datayı çözüp datapacket tipine getiriyoruz.
-                
-                print(data.command)
-                if(data.command == "AUTH"): ## BAĞLANTI KUR
-                    self.AUTH(address)
-                    continue
-                    
-                if(data.command == "NLST"): ## SUNUCUDA BULUNAN DOSYALARI LISTELE(LS)
-                    self.NLST(address)
-                    continue
             
-                if(data.command == "STOR"): ## SUNUCUYA DOSYA YUKLE(PUT)
-                    self.STOR(data,address)
-                    continue
+            client_msg = self.ServerSocket.recvfrom(self.BUFFERSIZE)
+            
+            data =client_msg[0]## data
+            address = client_msg[1] ## ip&port
+            data = pickle.loads(data) ## datayı çözüp datapacket tipine getiriyoruz.
+            
+            print(data.command)
+            if(data.command == "AUTH"): ## BAĞLANTI KUR
+                self.AUTH(address)
+                continue
+                
+            if(data.command == "NLST"): ## SUNUCUDA BULUNAN DOSYALARI LISTELE(LS)
+                self.NLST(address)
+                continue
+        
+            if(data.command == "STOR"): ## SUNUCUYA DOSYA YUKLE(PUT)
+                self.STOR(address,data)
+                continue
 
-                if(data.command == "RETR"): ## SUNUCUDAN DOSYANIN BIR KOPYASINI YERELİNE İNDİR(GET)
-                    self.RETR(data,address)
-                    continue
+            if(data.command == "RETR"): ## SUNUCUDAN DOSYANIN BIR KOPYASINI YERELİNE İNDİR(GET)
+                self.RETR(data,address)
+                continue
+            
+            if(data.command == "QUIT"): ## Kullanıcının adresini dict den çıkart
+                self.QUIT(address)
+                continue
+            
+            if(data.command == "TEST"):
+                self.TEST(address,data)
+                continue
                 
-                if(data.command == "QUIT"): ## Kullanıcının adresini dict den çıkart
-                    self.QUIT(address)
-                    continue
-                
-            except:
-                self.send_msg_to_client("500",address)
+            
                 
                 
     
@@ -134,33 +137,19 @@ class FTPServer:
         ardından böyle bir dosyanın bulunup bulunamadığınına bakalım,
         ardından dosyanın içeriğinin buffer değerini aşıp aşmadığına bakalım, aşıyorsa 
         """
-        if(address not in self.connectedClientDict or self.connectedClientDict[address]==False):
-            self.send_msg_to_client("530",address)
-            return
+        file_name = data.data ## istenen dosyanın adı
+        file_path = self.PATH + "\\170401028\\serverside_folder\\" + file_name ## istenilen dosyanın konumu
         
-        try:
-            file_name = data.data ## istenen dosyanın adı
-            file_path = self.PATH + "\serverside_folder\\" + file_name ## istenilen dosyanın konumu
-            
-            if(path.exists(file_path) == False): ## öyle bir dosya yoksa
-                self.send_msg_to_client("550",address)
-                return
-            
-            if(os.path.getsize(file_path) < self.BUFFERSIZE): ## dosyanın içeriği bufferden küçükse yolluyoruz
-                
-                f = open(file_path,'rb') ## dosyanın içeriğini okuduk
-                newP = datapacket.DataPacket("RETRANSWER",0,"",0) 
-                newP.data = f.read() ## dosyanın içini paketin data kısmına yerleştiriyoruz.
-                f.close()
-                
-                pickled_data = pickle.dumps(newP) ## pickle ile karşı  tarafın aynı şekilde açabileceği hale getirdik.
-                
-                self.ServerSocket.sendto(pickled_data,address) ## yollandı
-                
-                self.send_msg_to_client("200")
-        except:
-            self.send_msg_to_client("502",address)
-            
+        if(os.path.exists(file_path)==False): ## istenilen dosya yoksa
+            self.send_msg_to_client("452",address)
+        
+        f  = open(file_path,"rb") 
+        file_data = f.read()  ## dosyanın içini okuduk
+        print(file_data)
+        data_packet = datapacket.DataPacket("FILE",0,file_data,0)
+        data_packet = pickle.dumps(data_packet)
+        
+        self.ServerSocket.sendto(data_packet,address)
             
         
     
@@ -197,6 +186,10 @@ class FTPServer:
         except:
             send_msg_to_client("500",address)
     
+    def TEST(self,address,data):
+        newP = datapacket.DataPacket("TEST",0,data.data,0)
+        pickled_newP = pickle.dumps(newP)
+        self.ServerSocket.sendto(pickled_newP,address)
     
     def QUIT(self,address):
         """Kullanıcının ip&port bilgisini dictionary den çıkartıyoruz
