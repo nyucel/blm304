@@ -1,4 +1,5 @@
 import socket
+import os
 import datapacket
 import pickle
  
@@ -9,6 +10,7 @@ class Client:
         self.SERVER_IP = SERVER_IP
         self.SERVER_PORT = SERVER_PORT
         self.BUFFERSIZE = BUFFERSIZE
+        self.PATH = os.path.abspath(os.getcwd())
         
         self.server_address = (SERVER_IP,SERVER_PORT) ##ip&port çifti
         self.ClientSocket = None
@@ -18,10 +20,14 @@ class Client:
         self.CONNECT()
         self.GET("sample")
         
+        
+        
     def create_socket(self):
         """Client side UDP Socketi oluşturur"""
         self.ClientSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
         print("Client Side UDP socket oluşturuldu")
+    
+    
     
     
     def CONNECT(self):
@@ -41,23 +47,44 @@ class Client:
         except:
             print("Sunucuya mesaj yollama sırasında bir hata meydana geldi..")
             
+            
+            
     def LIST(self):
         """Sunucuda bulunan dosyaların listesi için istek yapan fonksiyon
         Serverside da NLST fonksiyonunu tetikler"""
         server_response = self.create_and_send_packet(command="NLST")
         print(server_response)
     
+    
+    
     def GET(self,filename):
         server_response   = self.create_and_send_packet(command="RETR",data=filename)
-        
-        with open(filename, 'wb') as the_file:
+        file_path =  self.PATH + "\\clientside_folder\\" + filename ## yazılacak  dosya yolu
+        print(server_response)
+        with open(file_path, 'w') as the_file:
             the_file.write(server_response.data)
+        
+        self.check_file_integrity(server_response.data,server_response.checksum)
+        print("Dosya Karşıdan yüklendi")
+
+
+    def check_file_integrity(self,data,checksum):
+        dp = datapacket.DataPacket("",0,"")
+        if(checksum == dp.calculateChecksum(data)):
+            print("Dosya içeriği kontrol edildi ! OK")
+            return True
+        else:
+            print("Dosya düzgün iletilememiş ! X")
+            return False
+
 
     def TEST(self,echo):
         server_response = self.create_and_send_packet(command="TEST",data=echo)
         print(server_response.data)
     
-    def create_and_send_packet(self,command = "" , seqNumber = 0 , data = "" , checksum = 0):
+    
+    
+    def create_and_send_packet(self,command = "" , seqNumber = 0 , data = ""):
         """Verilen parametreler ile Sunucuya UDP paketi yolluyor,
         sunucudan dönen cevabı return ediyor
         Ctype değeri nasıl bir paket yollandığını belirtiyor,
@@ -65,7 +92,7 @@ class Client:
         
         ## YOLLA 
         
-        datapckt = datapacket.DataPacket(command,seqNumber,data,checksum)
+        datapckt = datapacket.DataPacket(command,seqNumber,data)
         pickled_datapacket = pickle.dumps(datapckt)
         self.ClientSocket.sendto(pickled_datapacket,self.server_address)
         

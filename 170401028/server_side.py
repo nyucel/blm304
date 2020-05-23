@@ -137,20 +137,21 @@ class FTPServer:
         ardından böyle bir dosyanın bulunup bulunamadığınına bakalım,
         ardından dosyanın içeriğinin buffer değerini aşıp aşmadığına bakalım, aşıyorsa 
         """
+        
         file_name = data.data ## istenen dosyanın adı
         file_path = self.PATH + "\\170401028\\serverside_folder\\" + file_name ## istenilen dosyanın konumu
         
         if(os.path.exists(file_path)==False): ## istenilen dosya yoksa
             self.send_msg_to_client("452",address)
         
-        f  = open(file_path,"rb") 
+        f  = open(file_path,"r") 
         file_data = f.read()  ## dosyanın içini okuduk
         print(file_data)
-        data_packet = datapacket.DataPacket("FILE",0,file_data,0)
+        data_packet = datapacket.DataPacket("FILE",0,file_data)
         data_packet = pickle.dumps(data_packet)
-        
+        f.close()
         self.ServerSocket.sendto(data_packet,address)
-            
+        
         
     
     def STOR(self,address,data):
@@ -163,7 +164,7 @@ class FTPServer:
         
         try:
             file_name  = self.data.data
-            file_path = self.PATH + "\serverside_folder\\" + file_name
+            file_path = self.PATH + "\\170401028\\serverside_folder\\" + data.data
             
             if(path.exists(file_path) == True): ## böyle bir dosya zaten varsa
                 self.send_msg_to_client("553",address)
@@ -187,7 +188,7 @@ class FTPServer:
             send_msg_to_client("500",address)
     
     def TEST(self,address,data):
-        newP = datapacket.DataPacket("TEST",0,data.data,0)
+        newP = datapacket.DataPacket("TEST",0,data.data)
         pickled_newP = pickle.dumps(newP)
         self.ServerSocket.sendto(pickled_newP,address)
     
