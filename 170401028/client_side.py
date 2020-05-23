@@ -18,7 +18,7 @@ class Client:
         
         self.create_socket()
         self.CONNECT()
-        self.GET("sample")
+        self.PUT("sample")
         
         
         
@@ -58,17 +58,53 @@ class Client:
     
     
     def GET(self,filename):
+        """Serverside RETR fonksiyonunu çalıştırıyor
+        Sunucudan dosya indirme
+        filename = > clientte bulunan dosyanınadı"""
         server_response   = self.create_and_send_packet(command="RETR",data=filename)
-        file_path =  self.PATH + "\\clientside_folder\\" + filename ## yazılacak  dosya yolu
-        print(server_response)
+        file_path =  self.PATH + "\\clientside_folder\\" + filename ## yollanacak  dosya yolu
+        
         with open(file_path, 'w') as the_file:
             the_file.write(server_response.data)
         
         self.check_file_integrity(server_response.data,server_response.checksum)
         print("Dosya Karşıdan yüklendi")
 
+    
+    def PUT(self,filename):
+        """Serverside STOR fonksiyonunu çalıştırıyor,
+        Sunucuya dosya yükleme
+        filename = > yüklenecek dosyanın adı"""
+        file_path =  self.PATH + "\\clientside_folder\\" + filename ## yazılacak dosya yolu
+
+        server_response_1 = self.create_and_send_packet(command="STOR",data=filename)
+        
+        if(server_response_1 == "553"):
+            print("Bu isimde bir dosya serverde yüklü..")
+            return
+        elif(server_response_1 == "500"):
+            print("Sunucu tarafında bilinmeyen bir hata meydana geldi..")
+            return 
+        elif(server_response_1 == "150"):
+            print("Dosya karşıda oluşturuldu.. içerik yollanıyor")
+            
+            f  = open(file_path,"r")
+            f_data = f.read(2048)
+            
+            server_response_2 =  self.create_and_send_packet(command="DATA", data = f_data)
+            if(server_response_2 == "200"):
+                print("Dosya sunucuya yüklendi.")
+            else:
+                print("Başarısız..")
+        else:
+            print("Başarısız.")
+            
+        
+    
 
     def check_file_integrity(self,data,checksum):
+        """Karşıdan yüklenen veriyinin checksum değerini hesaplıyoruz,
+        server tarafından yollanan checksum değeri ile eşitse doğrulanmış oluyor"""
         dp = datapacket.DataPacket("",0,"")
         if(checksum == dp.calculateChecksum(data)):
             print("Dosya içeriği kontrol edildi ! OK")
