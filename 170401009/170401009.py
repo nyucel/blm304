@@ -14,6 +14,8 @@ import time
 
     Sources: RFC 791, RFC 2460
     
+    FİLTRELEME YAPMAK İÇİN YAZIM DİLİ
+    https://biot.com/capstats/bpf.html
         
 """
 
