@@ -14,6 +14,8 @@
 import socket
 import time
 import argparse as arg
+import sys
+
 
 DEFAULT_PORT = 9998
 DATA_PORT = 9999
@@ -25,16 +27,17 @@ class MyFTPClient(object):
     def __init__(self,server_address):
         self.server_address = server_address
         self.clisocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.clisocket.settimeout(10)
+        self.dsocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.clisocket.settimeout(5)
        
         try:
-            self.clisocket.sendto(bytes("INIT","utf-8"),self.server_address)
+            self.clisocket.sendto(bytes("ADAT","utf-8"),self.server_address)
             self.status = str(self.clisocket.recv(1024),"utf-8")
         except (socket.timeout, OSError):
             print("Connection failed.")
             print("No response from the server.")
             print("Check whether the server is running or not, then retry.")
-            exit(1)
+            sys.exit(0)
         
     def put(self,command):
         self.clisocket.sendto(bytes(command,"utf-8"),self.server_address)
@@ -48,12 +51,13 @@ class MyFTPClient(object):
 
     def listdir(self,command):
         self.clisocket.sendto(bytes(command,"utf-8"),self.server_address)
-        print(str(self.clisocket.recv(1024),"utf-8"))
+        print(str(self.clisocket.recv(25600),"utf-8"))
+        
         
     def disconnect(self,command):
         self.clisocket.sendto(bytes(command,"utf-8"),self.server_address)
-        time.sleep(2)
-        print("FTP session terminated.")
+        print(str(self.clisocket.recv(1024),"utf-8"))
+        
 
 def parse_args(argv):
     
@@ -67,12 +71,7 @@ def parse_args(argv):
     
     return args
  
-def main(argv):
-    print("You shouldn't be running this module directly.")
-    print("You rather run myftpshell.py.")
-    args = parse_args(argv)
-    print("Server socket: (%s, %i)" % (args['remote'],args['port']))
-        
+
 
 if __name__=="__main__":
     print("You shouldn't be running this module, rather run myftp.py.")

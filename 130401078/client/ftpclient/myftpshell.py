@@ -31,9 +31,12 @@ class MyFTPShell(cmd.Cmd):
         time.sleep(2)
         print("Host: {}".format(self.cmd_args['remote']))
         print("Port: {}".format(self.cmd_args['port']))
-        time.sleep(3)
+        time.sleep(2)
         self.myftpclient = client.MyFTPClient((self.cmd_args['remote'],self.cmd_args['port']))
+        self.myftpclient.clisocket.settimeout(None)
+        print(self.myftpclient.status)
         print("Successfully connected.\n")
+        
         
     # ----- basic ftp shell commands -----
     def do_put(self, arg):
@@ -81,7 +84,6 @@ class MyFTPShell(cmd.Cmd):
         self.cmd_args = client.parse_args(argv)
         
     def postloop(self):
-        print("Thank you for using myftp.")
         print("Bye, see you soon!")        
     
 
