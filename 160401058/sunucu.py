@@ -4,7 +4,7 @@ import sys
 from threading import Thread
 
 HOST = "127.0.0.1"
-
+#Enes Delibalta 160401058
 PORT=int(input("PORT giriniz"))
 
 
