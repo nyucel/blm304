@@ -1,4 +1,5 @@
 import socket
+from sys import exit
 import os
 import datapacket
 import pickle
@@ -16,11 +17,9 @@ class Client:
         self.ClientSocket = None
         self.isConnected = False
         
-        self.create_socket()
-        self.CONNECT()
-        self.PUT("sample")
-        
-        
+        self.create_socket() ## client udp socket oluştur
+        self.CONNECT()  ## Bağlan
+        self.LIST()
         
     def create_socket(self):
         """Client side UDP Socketi oluşturur"""
@@ -118,12 +117,22 @@ class Client:
         server_response = self.create_and_send_packet(command="TEST",data=echo)
         print(server_response.data)
     
-    
-    
+    def ABORT(self):
+        """Bu fonksiyon çalıştıktan sonra dosya indirme,yükleme,güncelleme
+        işlemlerine server tarafındanizin verilmiyor"""
+        
+        server_response = self.create_and_send_packet(command="QUIT")
+        
+        if(server_response == "231"):
+            print("Sunucu bağlantısı kesildi.")
+            isConnected = False
+        else:
+            exit("Bağlantı kesilemedi program kapanıyor")
+            
+            
     def create_and_send_packet(self,command = "" , seqNumber = 0 , data = ""):
         """Verilen parametreler ile Sunucuya UDP paketi yolluyor,
         sunucudan dönen cevabı return ediyor
-        Ctype değeri nasıl bir paket yollandığını belirtiyor,
         """
         
         ## YOLLA 
