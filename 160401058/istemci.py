@@ -6,7 +6,7 @@ HOST = input("IP giriniz: (127.0.0.1)")
 
 s = socket.socket()
 s.connect((HOST, PORT))
-
+#Enes Delibalta 160401058
 cur_dir = s.recv(1024)
 cur_dir = cur_dir.decode("utf-8")
 while True:
