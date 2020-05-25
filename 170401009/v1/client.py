@@ -2,6 +2,7 @@ from scapy.all import *
 import time
 import pickle
 import sys
+import hashlib
 
 
 server_ip = ""
@@ -11,7 +12,8 @@ parcalanma_boyut = 0
 dinleyici = AsyncSniffer()
 gelen_paketler=[]
 debug=0             # debug 1 olursa printleri açıyorum.
-
+dosya_bilgileri=[]
+alinan_dosya={}
 
 
 
@@ -81,6 +83,38 @@ def temizlik():#gelen önceki paketleri temizliyoruz.
 def dosya_listele():
     mesaj_gonder("LS")
     iletildi_mi_komut("LS")
+def dosya_indir(dosya):
+    global alinan_dosya
+    mesaj_gonder("GET "+dosya)
+    if(iletildi_mi_komut("GET")):
+        while(len(alinan_dosya) != int(dosya_bilgileri[3])):
+            for paket in gelen_paketler:
+                alinan_paketcik = paket.decode().split(" ")
+                if alinan_paketcik[0] == "FILESEND" and alinan_paketcik[1] not in alinan_dosya:             #ALINAN PAKETCIK = ["FILESEND PARCA NUMARASI HEX"]
+                    alinan_dosya[int(alinan_paketcik[1])]=alinan_paketcik[2]
+                    print("Parça Sayısı = "+str(dosya_bilgileri[3]) + "/"+str(len(alinan_dosya)))
+                    mesaj_gonder("OKFILE! "+str(alinan_paketcik[1]))                                        #ALINDI DİYE GÖNDER
+                if alinan_paketcik[0] == "FILESEND" and alinan_paketcik[1] in alinan_dosya:                 #ALINDI FAKAT HALEN YOLLANIYORSA
+                    print("Aynı paket yollandı")
+                    mesaj_gonder("OKFILE! " + str(alinan_paketcik[1]))
+    print("Bitti")
+    dosya_birlestir(dosya_bilgileri[0])
+    if hash_olustur(dosya_bilgileri[0]).hexdigest() != dosya_bilgileri[1]:
+        print("Dosya Transferinde Bir Hata Meydana Geldi.Hashler Uyuşmuyor!!!!")
+        mesaj_gonder("FINISH_TRANSFER_ERROR")
+
+    else:
+        print("Aktarım hash değerleri uyuşuyor. Dosya transferi başarılı")
+        mesaj_gonder("FINISH_TRANSFER_BASARILI")
+
+def dosya_birlestir(tofile):
+    global alinan_dosya
+    output = open(tofile, 'wb')
+    for i in range(1,len(alinan_dosya)+1):
+        output.write(bytes.fromhex(alinan_dosya[i]))
+    output.close()
+
+
 
 
 def iletildi_mi_komut(komut):
@@ -100,7 +134,47 @@ def iletildi_mi_komut(komut):
                 print("Bağlantı zaman aşımına uğradı")
                 x=0
         temizlik()
+        return 1
+    if komut == "GET":
+        while x:
+            for paket in gelen_paketler:
+                test = paket.decode().split(" ")
+                if test[0]=="INF-01":
+                    global dosya_bilgileri
+                    dosya_bilgileri.append(test[1])
+                    dosya_bilgileri.append(test[2])
+                    dosya_bilgileri.append(test[3])
+                    dosya_bilgileri.append(test[4])
+                    print("**********DOSYA ADI************")
+                    print(test[1])            #dosyalar
+                    print("**********DOSYA HASH************")
+                    print(test[2])
+                    print("**********DOSYA BOYUT************")
+                    print(test[3])
+                    print("**********DOSYA TAHMİNİ PARÇA SAYISI************")
+                    print(test[4])
+                    x=0
+            if int(time.time()-baslangic_zamani) > 10 :  #10 sn bekler
+                print("Bağlantı zaman aşımına uğradı")
+                x=0
+        temizlik()
+        return 1
 
+
+
+
+
+def hash_olustur(file):
+    file_hash = hashlib.blake2b() #b2sum
+    with open(file, "rb") as f:
+        while 1:
+            chunk = f.read(8192)
+            if not chunk:
+                break
+            file_hash.update(chunk)
+            f.read(8192)
+        f.close()
+    return file_hash
 
 
 
@@ -126,7 +200,7 @@ def menu():
         if choice == "1":
             dosya_listele()
         elif choice == "2":
-            print(3)
+            dosya_indir(input("Lütfen Dosya İsmini Giriniz"))
         elif choice == "3":
             print(2)
         elif choice == "Q" or choice == "q":

@@ -3,8 +3,14 @@ from scapy.all import *
 
 import os, sys
 
-def join(fromdir, tofile,readsize):
+def join(tofile):
+    global alinan_dosya
     output = open(tofile, 'wb')
+    for i in range(1,len(alinan_dosya):
+        output.write(alinan_dosya[i].encode())
+    output.close()
+
+def join2(fromdir, tofile,readsize):
     parts  = os.listdir(fromdir)
     parts.sort(  )
     for filename in parts:
@@ -16,7 +22,6 @@ def join(fromdir, tofile,readsize):
             output.write(filebytes)
         fileobj.close(  )
     output.close(  )
-
 
 
 
