@@ -19,7 +19,7 @@ class Client:
         
         self.create_socket() ## client udp socket oluştur
         self.CONNECT()  ## Bağlan
-        self.LIST()
+        self.LISTEN_USER()
         
     def create_socket(self):
         """Client side UDP Socketi oluşturur"""
@@ -27,11 +27,10 @@ class Client:
         print("Client Side UDP socket oluşturuldu")
     
     
-    
-    
     def CONNECT(self):
         """SUNUCUYA GÖNDERİLEN İLK İSTEK
         AUTH Commandına sahip bir paket yolluyoruz, sunucu onaylarsa 230 cevabı döndürüyor,
+        İleride buraları geliştirebilirim
         isconnected değerini true işaretliyoruz. """
         
         try:
@@ -76,6 +75,9 @@ class Client:
         filename = > yüklenecek dosyanın adı"""
         file_path =  self.PATH + "\\clientside_folder\\" + filename ## yazılacak dosya yolu
 
+        if(os.path.exists(file_path) == False): ## sende yüklemek istediğin dosya yoksa
+                print("Böyle bir dosyanın clientside_folder dosyası içinde bulunduğundan emin olun")
+                return
         server_response_1 = self.create_and_send_packet(command="STOR",data=filename)
         
         if(server_response_1 == "553"):
@@ -88,7 +90,7 @@ class Client:
             print("Dosya karşıda oluşturuldu.. içerik yollanıyor")
             
             f  = open(file_path,"r")
-            f_data = f.read(2048)
+            f_data = f.read()
             
             server_response_2 =  self.create_and_send_packet(command="DATA", data = f_data)
             if(server_response_2 == "200"):
@@ -98,24 +100,12 @@ class Client:
         else:
             print("Başarısız.")
             
-        
-    
-
-    def check_file_integrity(self,data,checksum):
-        """Karşıdan yüklenen veriyinin checksum değerini hesaplıyoruz,
-        server tarafından yollanan checksum değeri ile eşitse doğrulanmış oluyor"""
-        dp = datapacket.DataPacket("",0,"")
-        if(checksum == dp.calculateChecksum(data)):
-            print("Dosya içeriği kontrol edildi ! OK")
-            return True
-        else:
-            print("Dosya düzgün iletilememiş ! X")
-            return False
 
 
     def TEST(self,echo):
         server_response = self.create_and_send_packet(command="TEST",data=echo)
         print(server_response.data)
+    
     
     def ABORT(self):
         """Bu fonksiyon çalıştıktan sonra dosya indirme,yükleme,güncelleme
@@ -128,6 +118,17 @@ class Client:
             isConnected = False
         else:
             exit("Bağlantı kesilemedi program kapanıyor")
+            
+    def check_file_integrity(self,data,checksum):
+        """Karşıdan yüklenen veriyinin checksum değerini hesaplıyoruz,
+        server tarafından yollanan checksum değeri ile eşitse doğrulanmış oluyor"""
+        dp = datapacket.DataPacket("",0,"")
+        if(checksum == dp.calculateChecksum(data)):
+            print("Dosya içeriği kontrol edildi ! OK")
+            return True
+        else:
+            print("Dosya düzgün iletilememiş ! X")
+            return False
             
             
     def create_and_send_packet(self,command = "" , seqNumber = 0 , data = ""):
@@ -144,7 +145,7 @@ class Client:
         ## CEVABI DÖNDÜR
         server_response = self.ClientSocket.recvfrom(self.BUFFERSIZE)[0]
         try:
-            ## encoded ise 
+            ## encoded 
             response_data = server_response.decode(encoding = "UTF-8")
             return response_data
         
@@ -153,6 +154,31 @@ class Client:
             response_data  = pickle.loads(server_response)
             return response_data
             
-            
-        
-c = Client()
+    def LISTEN_USER(self):
+        try:
+            while(self.isConnected == True):
+                print("""
+                    Yapmak istediğiniz işlemi seçin
+                    1. Sunucudaki dosyaları listele
+                    2. Sunucuya dosya yükle
+                    3. Sunucudan dosya indir
+                    4.Sunucu ile bağlantıyı kes""")
+                
+                choice = int(input())
+                if(choice == 1 ):
+                    self.LIST()
+                elif(choice == 2 ): 
+                    self.PUT(input("YÜklemek istediğiniz dosyanın adını giriniz"))
+                elif(choice == 3):
+                    self.GET(input("İndirmek istediğiniz dosyanın adını girin"))
+                elif(choice == 4 ):
+                    self.ABORT()
+                else:
+                    print("Böyle bir seçim yok")
+        except:
+            print("İstemci çalışmayı durdurdu.")
+
+
+IP = input("Bağlanmak istediğiniz sunucunun IP adresini giriniz.")
+PORT = int(input("Bağlanmak istediğiniz PORT numarasını giriniz"))
+c = Client(SERVER_IP = IP, SERVER_PORT = PORT)

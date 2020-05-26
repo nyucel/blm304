@@ -4,11 +4,10 @@ import pickle ## pickle ile bir nesneyi transfer edebiliyorum
 import datapacket ## Paketimizin data kısmı 
 class FTPServer:
     
-    def __init__(self,ip = "127.0.0.1", port = 42, timeout = 3, bufferSize = 4096):
+    def __init__(self,ip = "127.0.0.1", port = 42,bufferSize = 4096):
         """Serverim için gerekli olacak değişkenleri ayarlıyorum"""
         self.UDP_IP = ip  
         self.UDP_PORT = port  
-        self.SERVER_TIMEOUT = timeout  
         self.BUFFERSIZE = bufferSize 
         self.PATH = os.path.abspath(os.getcwd())  ## bulunduğum dizin
         
@@ -169,8 +168,6 @@ class FTPServer:
             if(address not in self.connectedClientDict or self.connectedClientDict[address]==False):
                 self.send_msg_to_client("530",address) 
                 return
-            
-            
             file_name  = data.data
             file_path = self.PATH + "\\170401028\\serverside_folder\\" + data.data
             
@@ -226,5 +223,6 @@ class FTPServer:
         self.ServerSocket.close()
 
 s = FTPServer()
+
 
 
