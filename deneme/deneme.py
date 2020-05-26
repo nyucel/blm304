@@ -1,14 +1,16 @@
+parca_boyutu  = 100
 
-def checksum(data):
-    s = 0
-    n = len(data) % 2
-    for i in range(0, len(data)-n, 2):
-        s+= ord(data[i]) + (ord(data[i+1]) << 8)
-    if n:
-        s+= ord(data[i+1])
-    while (s >> 16):
-        s = (s & 0xFFFF) + (s >> 16)
-    s = ~s & 0xffff
-    return s
+file_name = "../170401028/serverside_folder/2mb-text.txt"
 
-print(checksum("asdasda"))
+input = open(file_name, 'rb')
+
+seqno = 0
+while True:
+    parca = input.read(parca_boyutu)
+    if not parca: break
+    seqno += 1
+    print(seqno)
+
+    data_packet = datapacket.DataPacket("200")
+    data_packet = pickle.dumps(data_packet)
+    self.ServerSocket.sendto(data_packet, address)
