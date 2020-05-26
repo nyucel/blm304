@@ -148,7 +148,7 @@ class FTPServer:
             if(os.path.exists(file_path)==False): ## istenilen dosya yoksa
                 self.send_msg_to_client("452",address)
             
-            f  = open(file_path,"r") 
+            f  = open(file_path,"rb") 
             file_data = f.read()  ## dosyanın içini okuduk
             
             data_packet = datapacket.DataPacket("FILE",0,file_data)
@@ -157,8 +157,7 @@ class FTPServer:
             self.ServerSocket.sendto(data_packet,address)
         except:
             send_msg_to_client("450",address)
-        
-        
+            
     
     def STOR(self,address,data):
         """Bu fonksiyon ile client servere dosya yüklüyor, bu fonksiyon iki fazda çalışacak
@@ -175,7 +174,7 @@ class FTPServer:
                 self.send_msg_to_client("553",address)
                 return
 
-            f = open(file_path,"w") ## client dosyasını oluşturduk içeriğini clientten alıp doldurmalıyız.
+            f = open(file_path,"wb") ## client dosyasını oluşturduk içeriğini clientten alıp doldurmalıyız.
             
             self.send_msg_to_client("150",address) ## cliente 150 ile işlemi devam ettirmesi gerektiğini söyledik
             
@@ -195,7 +194,7 @@ class FTPServer:
             
             f.close()
         except:
-            send_msg_to_client("500",address)
+            self.send_msg_to_client("500",address)
         
         
     

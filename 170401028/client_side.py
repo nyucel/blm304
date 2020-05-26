@@ -62,7 +62,7 @@ class Client:
         server_response   = self.create_and_send_packet(command="RETR",data=filename)
         file_path =  self.PATH + "\\clientside_folder\\" + filename ## yollanacak  dosya yolu
         
-        with open(file_path, 'w') as the_file:
+        with open(file_path, 'wb') as the_file:
             the_file.write(server_response.data)
         
         self.check_file_integrity(server_response.data,server_response.checksum)
@@ -89,7 +89,7 @@ class Client:
         elif(server_response_1 == "150"):
             print("Dosya karşıda oluşturuldu.. içerik yollanıyor")
             
-            f  = open(file_path,"r")
+            f  = open(file_path,"rb")
             f_data = f.read()
             
             server_response_2 =  self.create_and_send_packet(command="DATA", data = f_data)

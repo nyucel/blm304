@@ -10,7 +10,7 @@ class DataPacket:
         self.command = command
         self.seqNumber = seqNumber
         self.data = data
-        self.checksum = self.calculateChecksum(data) ## checksum değeri örnek oluşturulduğu an hesaplanıyor..
+        self.checksum = 0 ## checksum değeri örnek oluşturulduğu an hesaplanıyor..(hesaplanmadı)
         
     def printDataPacket(self):
         text = 'VERI KOMUTU (NE ICIN KULLANILACAK) :  {}  \n SIRA NUMARASI : {} \n CHECKSUM DEGERI :  {} '.format(self.command,self.seqNumber,self.checksum)
@@ -29,8 +29,9 @@ class DataPacket:
         return (c & 0xffff) + (c >> 16)
 
     def calculateChecksum(self,msg):
-        s = 0
-        for i in range(0, len(msg), 2):
-            w = ord(msg[i]) + (ord(msg[i+1]) << 8)
-            s = self.carry_around_add(s, w)
-        return ~s & 0xffff
+        #s = 0
+        #for i in range(0, len(msg), 2):
+          #  w = ord(msg[i]) + (ord(msg[i+1]) << 8)
+         #   s = self.carry_around_add(s, w)
+        #return ~s & 0xffff
+        return 0
