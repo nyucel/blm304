@@ -10,7 +10,7 @@ class DataPacket:
         self.command = command
         self.seqNumber = seqNumber
         self.data = data
-        self.checksum = 0 ## checksum değeri örnek oluşturulduğu an hesaplanıyor..(hesaplanmadı)
+        self.checksum = 0
         
     def printDataPacket(self):
         text = 'VERI KOMUTU (NE ICIN KULLANILACAK) :  {}  \n SIRA NUMARASI : {} \n CHECKSUM DEGERI :  {} '.format(self.command,self.seqNumber,self.checksum)

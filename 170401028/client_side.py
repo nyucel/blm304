@@ -1,6 +1,7 @@
 import socket
 from sys import exit
 import os
+import time
 import datapacket
 import pickle
 
@@ -8,10 +9,11 @@ import pickle
 class Client:
     """"""
 
-    def __init__(self, SERVER_IP="127.0.0.1", SERVER_PORT=42, BUFFERSIZE=5120):
+    def __init__(self, SERVER_IP="127.0.0.1", SERVER_PORT=42, BUFFERSIZE=5120, fileFragmentSize=4096):
         self.SERVER_IP = SERVER_IP
         self.SERVER_PORT = SERVER_PORT
         self.BUFFERSIZE = BUFFERSIZE
+        self.FILE_FRAGMENT_SIZE = fileFragmentSize
         self.PATH = os.path.abspath(os.getcwd())
 
         self.server_address = (SERVER_IP, SERVER_PORT)  ##ip&port çifti
@@ -82,7 +84,7 @@ class Client:
                 packet_data = data[0]
                 packet_sequenceNumber = data[1]
 
-                if packet_sequenceNumber == -1 : break
+                if packet_sequenceNumber == -1: break
 
                 f.write(packet_data)
 
@@ -103,7 +105,7 @@ class Client:
             print("Böyle bir dosyanın clientside_folder dosyası içinde bulunduğundan emin olun")
             return
 
-        #dosya adını yolluyuoruz
+        # dosya adını yolluyuoruz
         server_response_1 = self.create_and_send_packet(command="STOR", data=filename)
 
         if server_response_1 == "553":
@@ -118,15 +120,19 @@ class Client:
             print("Dosya karşıda oluşturuldu.. içerik yollanıyor")
 
             f = open(file_path, "rb")
-            f_data = f.read()
-            print(f_data)
-            server_response_2 = self.create_and_send_packet(command="DATA", data=f_data)
-            if (server_response_2 == "200"):
+            while True:
+                f_data = f.read(self.FILE_FRAGMENT_SIZE)
+                if not f_data: break  # dosya bittiyse çık
+                self.send_file_data_to_server(command="FILE", data=f_data)
+                time.sleep(0.02)
+
+            final_msg = self.create_and_send_packet(command="END") # bu  paketi karşıya bittiğini söylemek için atıyoruz.
+
+            if (final_msg == "200"):
                 print("Dosya sunucuya yüklendi.")
             else:
                 print("Başarısız..")
-        else:
-            print("Başarısız.")
+
 
     def TEST(self, echo):
         """Sunucuya yollanan mesajı yankılandırır."""
@@ -169,7 +175,7 @@ class Client:
 
     def create_and_send_packet(self, command="", seqNumber=0, data=""):
         """Verilen parametreler ile Sunucuya UDP paketi yolluyor,
-        sunucudan dönen cevabı return ediyor
+        sunucudan cevap BEKLER! return eder
         """
 
         ## YOLLA 
@@ -190,39 +196,54 @@ class Client:
             response_data = pickle.loads(server_response)
             return response_data
 
+    
+    def send_file_data_to_server(self, command="", seqNumber=0, data=""):
+        """Datapacket sınıfından bir nesne oluşturur ve onu servera yollar
+        cevap BEKLEMEZ"""
+        new_data_packet = datapacket.DataPacket(command, seqNumber, data)
+        pickled_data_packet = pickle.dumps(new_data_packet)
+        
+        self.ClientSocket.sendto(pickled_data_packet, self.server_address)
+
     def listen_and_return_file_data(self):
         """server veri akıtırken her bir veri paketini çözen fonksiyon"""
         server_response = self.ClientSocket.recvfrom(self.BUFFERSIZE)[0]
 
         server_response = pickle.loads(server_response)
 
-        return ((server_response.data, server_response.seqNumber)) ## veri ve sıra numarasını dönüyoruz.
+        return ((server_response.data, server_response.seqNumber))  ## veri ve sıra numarasını dönüyoruz.
+    
+    def HELP(self):
+        print("""Yapmak istediğiniz işlemi seçin
+                    lcd - > Yerelinizde(istemci) bulunan dosyalari listeler.
+                    ls  - > Sunucuda bulunan dosyalari listeler.
+                    test - > Sunucuyala veri akışında problem olup olmadığını test edin.
+                    PUT dosya_adi - > sunucuya istemciden dosya yukler.
+                    GET dosya_adi - > sunucundan  istemciye dosya indirir.
+                    quit  -> Sunucuyla bağlantıyı keser.
+                    """)
 
     def LISTEN_USER(self):
         try:
-            while (self.isConnected == True):
-                print("""
-                    Yapmak istediğiniz işlemi seçin
-                    1. Yerelimdeki dosyaları listele
-                    2. Sunucudaki dosyaları listele
-                    3. Sunucu ile bağlantıyı test et
-                    4.Sunucuya dosya yükle 
-                    5. Sunucudan dosya indir
-                    6.Sunucu ile bağlantıyı kes
-                    1-2-3-4-5-6 gibi seçim yapın""")
+            while (self.isConnected == True):  # sunucu bağlantıyı kestiyse boşa istek atmıyoruz.
+                print("Komutları görmek için 'help' yazabilirsiniz")
 
-                choice = int(input())
-                if choice == 1:
+                inp = input().split()  # GET emir.txt => ['GET','emir.txt']
+                choice = inp[0]
+
+                if choice == "help":
+                    self.HELP()
+                elif choice == "lcd":
                     self.LIST_CLIENT_FILES()
-                elif choice == 2:
+                elif choice == "ls":
                     self.LIST()
-                elif choice == 3:
+                elif choice == "test":
                     self.TEST(input("Sunucuya bir şey yazın mesela ' Selam '"))
-                elif choice == 4:
-                    self.PUT(input("YÜklemek istediğiniz dosyanın adını giriniz"))
-                elif choice == 5:
-                    self.GET(input("Sunucudan indirmek istediğiniz dosya adını girin."))
-                elif choice == 6:
+                elif choice == "PUT":
+                    self.PUT(inp[1])
+                elif choice == "GET":
+                    self.GET(inp[1])
+                elif choice == "quit":
                     self.ABORT()
                 else:
                     print("Böyle bir seçim yok")

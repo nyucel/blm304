@@ -157,7 +157,7 @@ class FTPServer:
 
                 sequenceNumber += 1  # Paket numarasını bir artttırdık.
                 print("Cliente " + str(sequenceNumber) + "Numaralı paket yollandı.")
-                time.sleep(0.02)  # karşının karşılayıp yazması için bir zaman veriyoruz.
+                time.sleep(0.03)  # karşının karşılayıp yazması için bir zaman veriyoruz.
             f.close()
             print("Tüm veri paketler  yollandı.")
             self.send_datapacket_msg_to_client(address=address, command="200", seqNumber=-1)
@@ -185,21 +185,25 @@ class FTPServer:
 
         self.send_simple_msg_to_client("150", address)  # cliente 150 ile işlemi devam ettirmesi gerektiğini söyledik
 
-        client_msg = self.ServerSocket.recvfrom(self.BUFFERSIZE)
+        while True:
+            client_msg = self.ServerSocket.recvfrom(self.BUFFERSIZE)
 
-        data = client_msg[0]  # data
-        address = client_msg[1]  # ip&port
+            data = client_msg[0]  # data
 
-        data = pickle.loads(data)  # veriyi DataPacket haline dönüşütürdük
+            data = pickle.loads(data)  # veriyi DataPacket haline dönüşütürdük
+            print(data.command)
 
-        f.write(data.data)  # DataPacket data kısmını dosyaya yazdık
+            if data.command == "END": break
+            print(data.data)
+            f.write(data.data)  # DataPacket data kısmını dosyaya yazdık
+
+        f.close()
 
         if data.checksum == data.calculateChecksum(data.data):
             self.send_simple_msg_to_client("200", address)
         else:
             self.send_simple_msg_to_client("600", address)
 
-        f.close()
 
     def TEST(self, address, data):
         """Servere yollanan datayı echo yapıyor, 
