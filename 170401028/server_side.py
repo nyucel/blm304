@@ -8,7 +8,7 @@ import hashlib
 
 class FTPServer:
 
-    def __init__(self, ip="127.0.0.1", port=42, bufferSize=5120, Chunksize=4096):
+    def __init__(self, ip="127.0.0.1", port=42, bufferSize=65535, Chunksize=60000):
         """Server için gerekli olacak değişkenleri ayarlıyorum"""
         self.UDP_IP = ip
         self.UDP_PORT = port
@@ -181,7 +181,7 @@ class FTPServer:
             print(data.command)
 
             if data.command == "END": break
-            print(data.data)
+
             f.write(data.data)  # DataPacket data kısmını dosyaya yazdık
 
         f.close()

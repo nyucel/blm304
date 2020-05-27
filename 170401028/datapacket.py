@@ -1,7 +1,7 @@
 class DataPacket:
     """ UDP başlığının veri kısmını bu classın bir nesnesi şeklinde yollayacağım.
     COMMAND = > MESAJIN AMACI
-    SEQNUMBER = > DOSYAYI İLETİLECEKSE ARKA ARKAYA GELMESİ GEREKEN PAKETLERİ SIRALAYACAĞIM NUMARA
+    SEQNUMBER = > ARKA ARKAYA GELMESİ GEREKEN PAKETLERİ SIRALAYACAĞIM NUMARA
     DATA = > YOLLANAN İŞLENECEK OLAN VERİ
     """
     

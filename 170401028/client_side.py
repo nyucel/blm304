@@ -9,7 +9,7 @@ import hashlib
 class Client:
     """"""
 
-    def __init__(self, SERVER_IP="127.0.0.1", SERVER_PORT=42, BUFFERSIZE=5120, Chunksize=4096):
+    def __init__(self, SERVER_IP="127.0.0.1", SERVER_PORT=42, BUFFERSIZE=65535 , Chunksize=60000):
         self.SERVER_IP = SERVER_IP
         self.SERVER_PORT = SERVER_PORT
         self.BUFFERSIZE = BUFFERSIZE
