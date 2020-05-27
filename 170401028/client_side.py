@@ -4,16 +4,16 @@ import os
 import time
 import datapacket
 import pickle
-
+import hashlib
 
 class Client:
     """"""
 
-    def __init__(self, SERVER_IP="127.0.0.1", SERVER_PORT=42, BUFFERSIZE=5120, fileFragmentSize=4096):
+    def __init__(self, SERVER_IP="127.0.0.1", SERVER_PORT=42, BUFFERSIZE=5120, Chunksize=4096):
         self.SERVER_IP = SERVER_IP
         self.SERVER_PORT = SERVER_PORT
         self.BUFFERSIZE = BUFFERSIZE
-        self.FILE_FRAGMENT_SIZE = fileFragmentSize
+        self.CHUNKSIZE = Chunksize
         self.PATH = os.path.abspath(os.getcwd())
 
         self.server_address = (SERVER_IP, SERVER_PORT)  ##ip&port çifti
@@ -87,10 +87,14 @@ class Client:
                 if packet_sequenceNumber == -1: break
 
                 f.write(packet_data)
-
-            self.check_file_integrity(server_response.data, server_response.checksum)
             print("Dosya Karşıdan yüklendi")
             f.close()
+
+            if(packet_data == self.md5(file_path)):
+                print("Dosya bütünlüğü doğrulandı.")
+            else:
+                print("Dosya sunucudan doğru olarak indirilememiş.")
+
         except:
             print("Dosya karşıdan  yüklenirken bir hata oluştu.")
 
@@ -121,17 +125,18 @@ class Client:
 
             f = open(file_path, "rb")
             while True:
-                f_data = f.read(self.FILE_FRAGMENT_SIZE)
+                f_data = f.read(self.CHUNKSIZE)
                 if not f_data: break  # dosya bittiyse çık
                 self.send_file_data_to_server(command="FILE", data=f_data)
-                time.sleep(0.02)
+                time.sleep(0.04)
 
-            final_msg = self.create_and_send_packet(command="END") # bu  paketi karşıya bittiğini söylemek için atıyoruz.
+            f.close()
+            final_msg = self.create_and_send_packet(command="END",data=self.md5(file_path)) # bu  paketi karşıya bittiğini söylemek için atıyoruz.
 
             if (final_msg == "200"):
-                print("Dosya sunucuya yüklendi.")
+                print("Dosya sunucuya yüklendi ve dosya içeriği doğrulandı")
             else:
-                print("Başarısız..")
+                print("Dosya yüklenememiş,veya yanlış yüklenmiş olabilir.")
 
 
     def TEST(self, echo):
@@ -161,6 +166,13 @@ class Client:
         else:
             print("Dosya düzgün iletilememiş ! X")
             return False
+
+    def md5(self,fname):
+        hash_md5 = hashlib.md5()
+        with open(fname, "rb") as f:
+            for chunk in iter(lambda: f.read(4096), b""):
+                hash_md5.update(chunk)
+        return hash_md5.hexdigest()
 
     def LIST_CLIENT_FILES(self):
         files_in_directory = os.listdir('clientside_folder')

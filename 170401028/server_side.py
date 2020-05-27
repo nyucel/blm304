@@ -3,16 +3,17 @@ import os
 import pickle  ## pickle ile bir nesneyi transfer edebiliyorum
 import datapacket  ## Paketimizin data kısmı
 import time
+import hashlib
 
 
 class FTPServer:
 
-    def __init__(self, ip="127.0.0.1", port=42, bufferSize=5120, fileFragmentSize=4096):
+    def __init__(self, ip="127.0.0.1", port=42, bufferSize=5120, Chunksize=4096):
         """Server için gerekli olacak değişkenleri ayarlıyorum"""
         self.UDP_IP = ip
         self.UDP_PORT = port
         self.BUFFERSIZE = bufferSize
-        self.FILE_FRAGMENT_SIZE = fileFragmentSize  ## dosyalardan veriler bu büyüklükte okunup yollanacak
+        self.CHUNKSIZE = Chunksize  ## dosyalardan veriler bu büyüklükte okunup yollanacak
         self.PATH = os.path.abspath(os.getcwd())  ## bulunduğum dizin
 
         self.ServerSocket = None  ## socket daha initialize edilmemiş
@@ -47,6 +48,13 @@ class FTPServer:
         self.ServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_DGRAM)
         self.ServerSocket.bind((self.UDP_IP, self.UDP_PORT))
         print("UDP Server oluşturuldu")
+
+    def md5(self, fname):
+        hash_md5 = hashlib.md5()
+        with open(fname, "rb") as f:
+            for chunk in iter(lambda: f.read(4096), b""):
+                hash_md5.update(chunk)
+        return hash_md5.hexdigest()
 
     def listen(self):
         while (True):
@@ -149,7 +157,7 @@ class FTPServer:
             f = open(file_path, "rb")
             sequenceNumber = 0
             while True:
-                file_data = f.read(self.FILE_FRAGMENT_SIZE)  # dosyanın içini istenilen boyut kadar okuduk
+                file_data = f.read(self.CHUNKSIZE)  # dosyanın içini istenilen boyut kadar okuduk
                 if not file_data: break
 
                 self.send_datapacket_msg_to_client(address=address, command="FILE",
@@ -157,14 +165,16 @@ class FTPServer:
 
                 sequenceNumber += 1  # Paket numarasını bir artttırdık.
                 print("Cliente " + str(sequenceNumber) + "Numaralı paket yollandı.")
-                time.sleep(0.03)  # karşının karşılayıp yazması için bir zaman veriyoruz.
+                time.sleep(0.04)  # karşının karşılayıp yazması için bir zaman veriyoruz.
             f.close()
             print("Tüm veri paketler  yollandı.")
-            self.send_datapacket_msg_to_client(address=address, command="200", seqNumber=-1)
+
+            # son pakette data kısmında yolladığımız tüm verinin özet değerini yolluyoruz.
+
+            self.send_datapacket_msg_to_client(address=address, command="200",
+                                               seqNumber=-1, data=self.md5(file_path))
         except:
             self.send_datapacket_msg_to_client(address=address, command="500", seqNumber=-99)
-
-            # paketler yollandıktan sonra yolladığım son paket yollanmış olması gereken paket sayısını yolluyor
 
     def STOR(self, address, data):
         """Bu fonksiyon ile client servere dosya yüklüyor, bu fonksiyon iki fazda çalışacak
@@ -185,6 +195,7 @@ class FTPServer:
 
         self.send_simple_msg_to_client("150", address)  # cliente 150 ile işlemi devam ettirmesi gerektiğini söyledik
 
+        data = ""
         while True:
             client_msg = self.ServerSocket.recvfrom(self.BUFFERSIZE)
 
@@ -199,11 +210,10 @@ class FTPServer:
 
         f.close()
 
-        if data.checksum == data.calculateChecksum(data.data):
+        if data.data == self.md5(file_path):
             self.send_simple_msg_to_client("200", address)
         else:
             self.send_simple_msg_to_client("600", address)
-
 
     def TEST(self, address, data):
         """Servere yollanan datayı echo yapıyor, 
