@@ -26,47 +26,137 @@ PORT = 9998
 DPORT = 9999
 HOST = "127.0.0.1"
 
+
 class MyFTPServer(ThreadingMixIn, UDPServer):
     
-    def start_message(self, host, port):
-        print("Starting server...")
+    def init_setup(self, host=HOST, port=PORT):
+         print("Server starting...")
+         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+         print("Binding to address {}:{}...".format(host,port))
+         self.client_socket.bind((host,port))
+         time.sleep(2)
+         print("Initializing env variables...")
+         self.cwd = os.getcwd() + "/uploads/"
+         self.success = "-Data connection already open; transfer starting"
+         self.cli_data = None
+         time.sleep(2)
+         print("Server is running on address {}:{}".format(host,port))
+         print("Active: service active since  %s" % datetime.datetime.now().isoformat(timespec='seconds') )
+         print("Waiting for request.")
+         
+    def send_response(self,retcode, message):
+        print("Sending {} return code to ".format(retcode) + str(self.client_address) +'...')
         time.sleep(2)
-        print("Host: %s" % host)
-        print("Port: %i" % port)
+        self.client_socket.sendto(bytes(str(retcode) + message ,"utf-8"),self.client_address)
+        print("Return code sent.")
+     
+    def handle_client_request(self,host=HOST, port=PORT):
+        
+         self.client_request, self.client_address = self.client_socket.recvfrom(1024)
+         cmd_parts = self.client_request.decode().split()
+         command = cmd_parts[0]
+         print(datetime.datetime.now().isoformat(timespec='seconds') + ': ',end='')
+         print("{} request from {}".format(command, self.client_address))
+         
+         if len(cmd_parts) == 1:
+            if command == "QUIT":
+                self.send_response(231,"-User logged out; service terminated.")
+            
+            elif command == "LIST":
+                
+                dir_contents = self.listdir()
+                if type(dir_contents) == tuple:
+                    self.send_response(125,self.success)
+                elif dir_contents == "EMPTY_DIR":
+                    self.send_response(125,self.success)
+                else:
+                    self.send_response(550,"-Requested action not taken. File unavailable or not found.")
+                
+            elif command == "ADAT":
+                 self.send_response(220,"-Service ready for new user.")
+                 print("New client connected.")
+                 
+                 
+            elif command == "STOR":
+                self.send_response(501,"-Syntax error in parameters or arguments.")
+            
+            elif command == "RETR":
+                self.send_response(501,"-Syntax error in parameters or arguments.")
+            
+            else:
+                self.send_response(502,"-Command not implemented.")
+         else:
+            cmd_args = " ".join([ i for i in cmd_parts[1:]]).strip()
+           
+            if command == "RETR":
+                index = cmd_args.rfind('/')
+                if index < 0:
+                    cmd_args = self.cwd + cmd_args
+                else: 
+                    cmd_args = self.cwd + cmd_args[index+1:]
+                isFile = os.path.isfile(cmd_args)
+                if isFile:
+                    try:
+                        self.send_response(125,self.success)
+                       
+                    except Exception as e:
+                        print(e)
+                        self.send_response(550,"-Requested action not taken. File unavailable or not found.")
+                
+                else:
+                    self.send_response(550,"-Requested action not taken. File unavailable or not found.")
+                   
+                    
+            elif command == "LIST":
+                dir_contents = self.listdir(cmd_args)
+                
+                if type(dir_contents) == tuple:
+                    self.send_response(125,self.success)
+                
+                elif dir_contents == "PERMISSION_ERROR":
+                    self.send_response(553,"-Requested action not taken. Permission denied.")
+                    
+                elif dir_contents == "EMPTY_DIR":
+                    self.send_response(125,self.success)
+                    
+                else:
+                    self.send_response(550,"-Requested action not taken. File unavailable or not found.") 
+                
+                
+            elif command == "STOR":
+                    try:
+                        self.send_response(125,self.success)
+                        self.filename = cmd_args
+                    except Exception as e:
+                        print(e)
+                        self.send_response(550,"-Requested action not taken. File unavailable or not found.")
+                
+                   
+                    
+            elif command == "QUIT":
+                self.send_response(501,"-Syntax error in parameters or arguments.")
+            
+            else:
+                self.send_response(502,"-Command not implemented.")
+        
     
-    def open_data_socket(self):
-        print("Opening data connection for transfer...")
-        time.sleep(1)
-        self.data_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.data_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.data_socket.bind((HOST,DPORT))
-        print("Data connection ready for transfer.")
-
-
-    def close_data_socket(self):
-       print("Requested file action was successful. ")
-       print("Closing data connection...")
-       time.sleep(1)
-       self.data_socket.close()
-       print("Data connection closed.")
-    
-    def waiting_message(self):
-        print("\nWaiting for new request.")
-    
+   
     def listdir(self, path="uploads/"):
-        self.cwd = os.getcwd() + "/uploads"
         try:
             paths = os.listdir(path)
         except FileNotFoundError:
             return "PATH_ERROR"
+        except PermissionError:
+            return "PERMISSION_ERROR"
+        except Exception:
+            return "UNKNOWN_ERROR"
         
         if len(paths)== 0:
-            count = 0
-            return None
+            return "EMPTY_DIR"
         else:
             count = len(max(paths,key=len))
             
-        header = "| %*s | %9s | %12s | %20s | %11s | %12s |" 
+        header = "| %*s | %9s | %10s | %20s | %10s | %10s |" 
         header = header % (count,"Name","Filetype","Filesize","Last Modified","Permission","User/Group")
         table = '%s\n%s\n%s\n' % ('-' * len(header), header, '-' * len(header))
         footer = '%s\n' % ('-' * len(header))
@@ -79,7 +169,7 @@ class MyFTPServer(ThreadingMixIn, UDPServer):
                 filetype= "Directory"
             else:
                 filetype = "File"
-            body += "| %*s | %9s | %12s | %20s | %11s | %12s |\n" % (count, p,filetype, 
+            body += "| %*s | %9s | %10s | %20s | %10s | %10s |\n" % (count, p,filetype, 
                     str(stat.st_size) + 'B',time.strftime('%b %d, %Y %H:%M',
                     time.localtime(stat.st_mtime)), oct(stat.st_mode)[-4:], str(stat.st_uid) + '/' + str(stat.st_gid))
         return table,body,footer
@@ -87,90 +177,132 @@ class MyFTPServer(ThreadingMixIn, UDPServer):
                                                
 class FTPRequestHandler(DatagramRequestHandler):
     def send_response(self,retcode, message):
-        print("Sending response to " + str(self.client_address) +'.')
+        print("Sending response to " + str(self.client_address) +'...')
         self.wfile.write(bytes(str(retcode) + message ,"utf-8"))
-        print("Response sent.")
+        print("{} return code sent.".format(retcode))
         
-    def transfert_data(self,data):
+    def transfer_data(self,data):
         print("Starting data transfer...")
-        self.server.open_data_socket()
-        print("Transfering data to {}".format(self.client_address))
-        self.wfile.write(bytes(str(data) ,"utf-8"))
-        self.server.close_data_socket()
+        print("Opening data connection...")
+        time.sleep(1)
+        print("Data connection ready for transfer.")
+        print("Transfering data...")
+        self.wfile.write(data)
+        print("Requested file action okay, completed.")
+        print("Closing data connection...")
+        time.sleep(1)
+        print("Data connection closed.")
+        print("\nWaiting for new request.")
         
-    def handle(self):
-        # cli_req = self.request[0].strip()
-        #socket = self.request[1]
+        
+    def handle(self):  
         cli_req = self.rfile.readline().strip()
         cmd_parts = cli_req.decode().split()
         command = cmd_parts[0]
-        
         print(datetime.datetime.now().__str__() + ': ',end='')
         print("{} request from {}".format(command, self.client_address))
         
         if len(cmd_parts) == 1:
             if command == "QUIT":
-                self.send_response(231,"-User logged out; service terminated.")
+                self.transfer_data(231,"-User logged out; service terminated.")
                 self.server.shutdown_request(self.request)
             
             elif command == "LIST":
-                self.send_response(125,"-Data connection already open; transfer starting.\n")
-                dir_contents = self.server.listdir()
-                self.wfile.write(bytes(str("Current Directory: " + self.server.cwd+"\n"),"utf-8"))
-                if dir_contents:
-                    
-                    self.wfile.write(bytes(str(dir_contents[0]),"utf-8"))
-                    self.transfert_data(dir_contents[1])
-                    self.wfile.write(bytes(str(dir_contents[2]),"utf-8"))
-                    
-                else:
-                    self.wfile.write(bytes(str("Directory Empty\n"),"utf-8"))
-                    
-                self.send_response(226,"-Closing data connection. Requested file action  was successful.")
-                self.server.waiting_message()
                 
+                dir_contents = self.server.listdir()
+                
+                if type(dir_contents) == tuple:
+                    self.wfile.write(bytes(str("Current Directory: " + self.server.cwd)+"\n","utf-8"))
+                    self.transfer_data(bytes(str(dir_contents[0]+dir_contents[1]+dir_contents[2]),"utf-8"))
+                   
+                    
+                elif dir_contents == "EMPTY_DIR":
+                    self.tranfer_data(bytes(str("Directory is empty.\n"),"utf-8"))
+                    
+                
+                else:
+                    self.transfer_data(550,"-Requested action not taken. File unavailable or not found.")
+                    
             elif command == "ADAT":
-                 self.send_response(220,"-Service ready for new user.")
-                 print("New client connected.")
-                 self.server.waiting_message()
+                 self.transfer_data(220,"-Service ready for new user.")
+                
+                              
+            elif command == "STOR":
+                self.transfer_data(501,"-Syntax error in parameters or arguments.")
+            elif command == "RETR":
+                self.transfer_data(501,"-Syntax error in parameters or arguments.")        
             else:
-               self.send_response(501,"-Syntax error in parameters or arguments")
-               self.server.waiting_message()
+                self.transfer_data(502,"-Command not implemented.")
+                
         else:
             cmd_args = " ".join([ i for i in cmd_parts[1:]]).strip()
+            
             if command == "RETR":
-                self.send_response(125,"-Data connection already open; transfer starting.")
-                self.send_response(226,"-Closing data connection. Requested file action was successful.")
-                self.server.waiting_message()
+                index = cmd_args.rfind('/')
+            
+                if index < 0:
+                    cmd_args = self.server.cwd + cmd_args
+                else: 
+                    cmd_args = self.server.cwd + cmd_args[index+1:]
+            
+                isFile = os.path.isfile(cmd_args)
+                if isFile:
+                    try:
+                        with open(cmd_args,'rb') as file:
+                            fdata = file.readline()
+                            while fdata:
+                                self.transfer_data(fdata)
+                                fdata = file.readline()
+                                            
+                    except Exception as e:
+                        print(e)
+                        self.transfer_data(550,"-Requested action not taken. File unavailable or not found.")
+                
+                else:
+                    self.transfer_data(550,"-Requested action not taken. File unavailable or not found.")
+                   
                 
             elif command == "LIST":
                 dir_contents = self.server.listdir(cmd_args)
                 
-                if (dir_contents != None) and (dir_contents != "PATH_ERROR"):
-                    self.wfile.write(bytes(str("Current Directory: " + self.server.cwd+"\n"),"utf-8"))
-                    self.send_response(125,"-Data connection already open; transfer starting.\n")
-                    self.wfile.write(bytes(str(dir_contents[0]),"utf-8"))
-                    self.transfert_data(dir_contents[1])
-                    self.wfile.write(bytes(str(dir_contents[2]),"utf-8"))
-                    self.send_response(226,"-Closing data connection. Requested file action successful")
+                if type(dir_contents) == tuple:
                     
+                    self.wfile.write(bytes(str("Directory: "+cmd_args+"\n"),"utf-8"))
+                    self.transfer_data(bytes(str(dir_contents[0]+dir_contents[1]+dir_contents[2]),"utf-8"))
+                    self.wfile.write(bytes(str("226-Data connection closed; requested file action was successful."),"utf-8"))
+                
+                elif dir_contents == "PERMISSION_ERROR":
+                    self.transfer_data(553,"-Requested action not taken. Permission denied.")
                     
-                elif dir_contents == "PATH_ERROR":
-                    self.send_response(550,"-Requested action not taken. File unavailable or not found.")
-                elif dir_contents == None:
-                    self.wfile.write(bytes(str("Current Directory: " + self.server.cwd+"\n"),"utf-8"))
-                    self.wfile.write(bytes(str("Directory Empty\n"),"utf-8"))
-                    
+                elif dir_contents == "EMPTY_DIR":
+                    self.transfer_data(bytes(str("Directory: "+cmd_args+" is empty\n"),"utf-8"))
+                    self.wfile.write("226-Data connection closed; requested file action was successful.") 
+                else:
+                    self.transfer_data(550,"-Requested action not taken. File unavailable or not found.") 
+                
                
-                self.server.waiting_message()
                 
             elif command == "STOR":
-                self.send_response(125,"-Data connection already open; transfer starting.\n")
-                self.send_response(226,"-Closing data connection. Requested file action successful")
-                self.server.waiting_message()
+                   cmd_args = self.request[1]
+                   try:
+                        with open(self.server.filename,'wb') as file:
+                            fdata = self.rfile.readline()
+                            while fdata:
+                                file.writeline()
+                                fdata = self.rfile.readline()
+                   except Exception as e:
+                        print(e)
+                        self.transfer_data(550,"-Requested action not taken. File unavailable or not found.")
+               
+                   
+                    
+            elif command == "QUIT":
+                self.transfer_data(501,"-Syntax error in parameters or arguments.")
+            
             else:
-                self.send_response(502,"-Command not implemented.")
-                self.server.waiting_message()
+                self.transfert_data(502,"-Command not implemented.")
+        
+       
 
 
 def parse_args(argv):
@@ -191,23 +323,21 @@ def parse_args(argv):
 
 
 def start_server():
-    server = MyFTPServer((HOST,PORT), FTPRequestHandler)
+    server = MyFTPServer((HOST,DPORT), FTPRequestHandler)
+    
     pid = os.getpid()
+    
     with open("pid.txt","w") as pfile:
         pfile.write(str(pid)+"\n")
         
     with server:
         server_thread = threading.Thread(target = server.serve_forever)
-        server_thread.name =" myftpserver_main_thread"
-        server_thread.daemon = True
-        server.start_message(HOST,PORT)
+        server_thread.daemon = True        
+        server.init_setup(HOST, PORT)
         server_thread.start()
-        
-        print("Server is running.")
-        print("Waiting for resquest.")
-        global count 
         while True:
-            pass
+           server.handle_client_request()
+        
         server.shutdown()
     
 

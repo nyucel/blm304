@@ -23,7 +23,7 @@ class MyFTPShell(cmd.Cmd):
     intro ="Welcome to MyFTP Shell.\n"
     intro += "Type 'help' or '?' to list all available commands.\n\n"
     intro += "Author: Abdoul Karim TOURE\n"
-    intro += "MyFTP 1.0.1 -- A Simple FTP Client using UDP\n\n"
+    intro += "MyFTP 1.0.1 --A Simple FTP Client using UDP\n\n"
     prompt="myftp> "
     
     def preloop(self):
@@ -36,7 +36,8 @@ class MyFTPShell(cmd.Cmd):
         self.myftpclient.clisocket.settimeout(None)
         print(self.myftpclient.status)
         print("Successfully connected.\n")
-        
+        cwd = self.myftpclient.cwdir()
+        MyFTPShell.intro += cwd+"\n\n"
         
     # ----- basic ftp shell commands -----
     def do_put(self, arg):
@@ -58,28 +59,42 @@ class MyFTPShell(cmd.Cmd):
         print("Print a listing of the contents of a directory on the remote machine.")
         
     def do_bye(self,arg):
-        self.myftpclient.disconnect("QUIT " + arg)
-        return True
-    
+        status = self.myftpclient.disconnect("QUIT " + arg)
+        print(status)
+        if status.split('-')[0]=='231':
+            return True
+        else:  return False
+        
     def help_bye(self):
         print("Terminate the FTP session with the remote server, and return to the command interpreter.")
         
     
     def do_quit(self,arg):
-        self.myftpclient.disconnect("QUIT " + arg)
-        return True
+        status = self.myftpclient.disconnect("QUIT " + arg)
+        print(status)
+        if status.split('-')[0]=='231':
+            return True
+        else:  return False
+        
 
     def help_quit(self):
         print("A synomym for bye.")
     
 
     def do_exit(self,arg):
-        self.myftpclient.disconnect("QUIT " + arg)
-        return True
+        status = self.myftpclient.disconnect("QUIT " + arg)
+        print(status)
+        if status.split('-')[0]=='231':
+            return True
+        else:  return False        
     
     def help_exit(self):
         print("A synonym for bye.")
     
+    def do_read(self,arg):
+        data = self.myftpclient.read_data()
+        print(data)
+
     def parse_args(self,argv):
         self.cmd_args = client.parse_args(argv)
         
