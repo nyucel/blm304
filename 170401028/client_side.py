@@ -47,11 +47,24 @@ class Client:
         except:
             print("Sunucuya mesaj yollama sırasında bir hata meydana geldi.. Sunucu ayakta mı ? ip doğru mu?")
 
+    def LIST_CLIENT_FILES(self):
+        """Yerelde bulunan dosyaların listesini yazdırır."""
+        files_in_directory = os.listdir('clientside_folder')
+        text = ""
+        if len(files_in_directory) == 0:
+            print("Yerelde hiç dosya yok.")
+            return
+
+        for i in range(len(files_in_directory)):
+            text += str(i + 1) + " . " + str(files_in_directory[i]) + "\n"
+        print(text)
+
     def LIST(self):
         """Sunucuda bulunan dosyaların listesi için istek yapan fonksiyon
         Serverside da NLST fonksiyonunu tetikler"""
         server_response = self.create_and_send_packet(command="NLST")
         print(server_response)
+
 
     def GET(self, filename):
         """Serverside RETR fonksiyonunu çalıştırıyor
@@ -174,16 +187,7 @@ class Client:
                 hash_md5.update(chunk)
         return hash_md5.hexdigest()
 
-    def LIST_CLIENT_FILES(self):
-        files_in_directory = os.listdir('clientside_folder')
-        text = ""
-        if len(files_in_directory) == 0:
-            print("Yerelde hiç dosya yok.")
-            return
 
-        for i in range(len(files_in_directory)):
-            text += str(i + 1) + " . " + str(files_in_directory[i]) + "\n"
-        print((text))
 
     def create_and_send_packet(self, command="", seqNumber=0, data=""):
         """Verilen parametreler ile Sunucuya UDP paketi yolluyor,
@@ -263,6 +267,6 @@ class Client:
             print("İstemci çalışmayı durdurdu.")
 
 
-# IP = input("Bağlanmak istediğiniz sunucunun IP adresini giriniz.")
-# PORT = int(input("Bağlanmak istediğiniz PORT numarasını giriniz"))
+IP = input("Bağlanmak istediğiniz sunucunun IP adresini giriniz.")
+PORT = int(input("Bağlanmak istediğiniz PORT numarasını giriniz"))
 c = Client(SERVER_IP="127.0.0.1", SERVER_PORT=42)
