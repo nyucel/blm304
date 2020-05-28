@@ -6,6 +6,8 @@ import datapacket
 import pickle
 import hashlib
 
+# 170401028 - Emir Kıvrak
+
 class Client:
     """"""
 

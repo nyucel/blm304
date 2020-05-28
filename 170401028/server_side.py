@@ -5,6 +5,7 @@ import datapacket  ## Paketimizin data kısmı
 import time
 import hashlib
 
+# 170401028 - Emir Kıvrak
 
 class FTPServer:
 
