@@ -269,4 +269,4 @@ class Client:
 
 IP = input("Bağlanmak istediğiniz sunucunun IP adresini giriniz.")
 PORT = int(input("Bağlanmak istediğiniz PORT numarasını giriniz"))
-c = Client(SERVER_IP="127.0.0.1", SERVER_PORT=42)
+c = Client(IP, PORT)
