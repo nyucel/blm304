@@ -22,7 +22,7 @@ BLM304 Rabia Kaynak - 160401091
 
 ```bash
 iptables -A INPUT -s IP-ADDRESS -p tcp -j DROP
-
+```
 
 ![iptables kural tablosu](https://i.hizliresim.com/pNmpvt.jpg)
 
