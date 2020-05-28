@@ -116,7 +116,7 @@ elif command.find("PUT") == 0:
             UDPClientSocket.settimeout(3)
             kontrol = UDPClientSocket.recvfrom(bufferSize)[0].decode()
 
-            if kontrol == "True":  # konsolda bilgilendirme yaptik
+            if kontrol == "True":
 
                 print("File successfully sended.")
 
