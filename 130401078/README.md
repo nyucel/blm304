@@ -9,8 +9,8 @@
 # Running the Client
 
 
-./myfpt.py -r  HOST   -p  PORT
-==============================
+./myftp.py  -r HOST -p PORT
+===========================
 
-HOST defaultS to 127.0.0.1
+HOST defaults to 127.0.0.1
 PORT defaults to 42
