@@ -176,7 +176,7 @@ class server:
         self.dinleme()
 
     def donut_bekle(self, packet):
-        client_ip, client_port, data = packet.getlayer(IP).dst, packet.getlayer(IP).sport, self.raw_data_cozucu(packet)
+        client_ip, client_port, data = packet.getlayer(IP).src, packet.getlayer(IP).sport, self.raw_data_cozucu(packet)
         print("42 PORTU PAKET YAKALADI.")
         # print(packet)
 

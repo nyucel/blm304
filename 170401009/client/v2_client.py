@@ -228,7 +228,7 @@ class client:
         test = paket(dport=self.server_port, sport=self.dinleme_port, dIp=server_ip, sIp=self.client_ip,
                      komut="HANDSHAKE")
         test.calistir()
-        test2 = paket(dport=self.server_port, sport=self.dinleme_port, dIp=self.client_ip, sIp=self.client_ip,
+        test2 = paket(dport=self.server_port, sport=self.dinleme_port, dIp=server_ip, sIp=self.client_ip,
                       komut="LS")
         test2.calistir()
 
@@ -244,12 +244,12 @@ class client:
             secenek = input("İŞLEM NUMARASI = ")
 
             if secenek == "1":
-                test2 = paket(dport=self.server_port, sport=self.dinleme_port, dIp=self.client_ip, sIp=self.client_ip,
+                test2 = paket(dport=self.server_port, sport=self.dinleme_port, dIp=server_ip, sIp=self.client_ip,
                               komut="LS")
                 test2.calistir()
             elif secenek == "2":
                 dosya_secenek = input("Dosya ismi = ")
-                test3 = paket(dport=self.server_port, sport=self.dinleme_port, dIp=self.client_ip, sIp=self.client_ip,
+                test3 = paket(dport=self.server_port, sport=self.dinleme_port, dIp=server_ip, sIp=self.client_ip,
                               komut="GET",
                               data=dosya_secenek)
                 test3.calistir()
@@ -267,13 +267,13 @@ class client:
                                        parca_sayisi=test3.data[4])
 
                     while int(dosya_temp.parca_sayisi) != len(dosya_temp.cache):
-                        test3 = paket(dport=self.server_port, sport=self.dinleme_port, dIp=self.client_ip, sIp=self.client_ip,
+                        test3 = paket(dport=self.server_port, sport=self.dinleme_port, dIp=server_ip, sIp=self.client_ip,
                                       komut="GET_FILE")
                         test3.calistir()
                         dosya_temp.cache.update(test3.data)
                         temp_len = len(dosya_temp.cache)
                         print(dosya_temp.parca_sayisi,"/",str(temp_len))
-                    test3 = paket(dport=self.server_port, sport=self.dinleme_port, dIp=self.client_ip, sIp=self.client_ip,
+                    test3 = paket(dport=self.server_port, sport=self.dinleme_port, dIp=server_ip, sIp=self.client_ip,
                                   komut="GET_FILE_END")
                     test3.calistir()
                     print("DOSYA ALINDI")
@@ -329,8 +329,8 @@ class client:
 cli = client()
 cli.menu()
 
-# test2 = paket(dport=self.server_port, sport=self.dinleme_port, dIp=self.client_ip, sIp=self.client_ip, komut="LS")
-# test3 = paket(dport=self.server_port, sport=self.dinleme_port, dIp=self.client_ip, sIp=self.client_ip, komut="GET",data="test.png")
+# test2 = paket(dport=self.server_port, sport=self.dinleme_port, dIp=server_ip, sIp=self.client_ip, komut="LS")
+# test3 = paket(dport=self.server_port, sport=self.dinleme_port, dIp=server_ip, sIp=self.client_ip, komut="GET",data="test.png")
 
 
 # test2.calistir()
