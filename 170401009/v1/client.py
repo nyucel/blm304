@@ -159,6 +159,17 @@ def iletildi_mi_komut(komut):
                 x=0
         temizlik()
         return 1
+    if komut == "SND":
+        while x:
+            for paket in gelen_paketler:
+                test = paket.decode().split(" ")
+                if test[0]=="SEND_HANDSHAKE_OK!":
+                    x=0
+            if int(time.time()-baslangic_zamani) > 10 :  #10 sn bekler
+                print("Bağlantı zaman aşımına uğradı")
+                x=0
+        temizlik()
+        return 1
 
 
 
@@ -176,6 +187,12 @@ def hash_olustur(file):
         f.close()
     return file_hash
 
+
+
+def dosya_gonder(dosya):
+    mesaj_gonder("SND")
+    if(iletildi_mi_komut("SND")):
+        print("test")
 
 
 
@@ -202,7 +219,7 @@ def menu():
         elif choice == "2":
             dosya_indir(input("Lütfen Dosya İsmini Giriniz"))
         elif choice == "3":
-            print(2)
+            dosya_gonder(input("Lütfen Dosya İsmini Giriniz"))
         elif choice == "Q" or choice == "q":
             exit(0)
 

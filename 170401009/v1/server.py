@@ -70,6 +70,19 @@ def komut_uygula(packet):
         temizlik()
         dosya_gonder()
         komut_bekle_durum = 0
+    if "SND".encode() in packet.getlayer(Raw).load:
+        print("***********SEND KOMUTU VERİLDİ*******************")
+
+
+        mesaj_gonder("SEND_HANDSHAKE_OK!")
+        temizlik()
+        komut_bekle_durum =0
+
+
+
+
+
+
 
 
 
@@ -91,10 +104,14 @@ def dosya_gonder():
                 return
             if durum == -1:
                 print("DOSYA GÖNDERİMİNDE PROBLEM OLUŞTU.HASH UYUŞMUYOR.")
+                temizlik()
+                komut_bekle_durum = 0
                 durum = 0
                 return
             if durum == 1:
                 print("DOSYA GÖNDERME BAŞARILI BİR ŞEKİLDE TAMAMLANDI")
+                temizlik()
+                komut_bekle_durum = 0
                 durum = 0
                 return
 
@@ -118,10 +135,14 @@ def dosya_gonder_kontrol(packet):
 
     if 'FINISH_TRANSFER_ERROR'.encode() in packet.getlayer(Raw).load:
         print("HATA VAR")
+        temizlik()
+        komut_bekle_durum = 0
         durum = -1
 
     if 'FINISH_TRANSFER_BASARILI'.encode() in packet.getlayer(Raw).load:
         print("DOSYA TRANSFERI BASARILI")
+        temizlik()
+        komut_bekle_durum = 0
         durum = 1
 
 
@@ -141,7 +162,7 @@ def komut_bekle(x):
     bekleme_zamanı= time.time()
     while komut_bekle_durum:
         print(".",end=" ")
-        time.sleep(1)
+        time.sleep(0.1)
         if(time.time()-bekleme_zamanı > x):
             dinleyici.stop()
             komut_bekle_durum=0
@@ -189,7 +210,7 @@ def baglanti_mesaj_kontrol():
             return 1
         # mesaj_gonder("Server tarafindan selam!")
         print(".",end=" ")
-        time.sleep(1)                                               #çok hızlı olursa paket kaçırıyor.
+        time.sleep(0.1)                                               #çok hızlı olursa paket kaçırıyor.
 
 
 
