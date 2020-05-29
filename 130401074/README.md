@@ -1,1 +1,1 @@
-ddddddddd
+Veri Haberleşmesi Vize Ödevi
