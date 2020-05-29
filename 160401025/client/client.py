@@ -10,7 +10,7 @@ import time
 import os
 import sys
 
-port=70
+port=42
 buffer=4096
 
 if len(sys.argv) != 2:
