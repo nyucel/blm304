@@ -5,8 +5,8 @@ import os
 import sys
 
 #Furkan Soysal 160401017
-_sport=70
-_dport=70
+_sport=42
+_dport=42
 _src=socket.gethostbyname(socket.gethostname())
 path=os.getcwd()
 
