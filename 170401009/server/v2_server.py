@@ -1,4 +1,4 @@
-#ATAKAN TÜRKAY 170401009
+# ATAKAN TÜRKAY 170401009
 
 from scapy.all import *
 import time
@@ -10,7 +10,8 @@ from math import ceil  # parca sayisi hesaplanirken 5.1 de olsa 6 parca oluyor.O
 
 class dosya:
 
-    def __init__(self, dosya_adi, dosya_boyut=0, parca_sayisi=0, hash=0, dosya_chunk_boyut=512):
+    def __init__(self, dosya_adi, dosya_boyut=0, parca_sayisi=0, hash=0,
+                 dosya_chunk_boyut=512):  # CHUNKSIZE DEĞİŞTİRİLEBİLİYOR.
         self.dosya_adi = dosya_adi
         self.boyut = dosya_boyut
         self.chunk_boyut = dosya_chunk_boyut
@@ -108,7 +109,7 @@ class paket:
             dinleyici.start()
             while self.durum:  # paket görevini tamamlayana kadar.
                 send(a)
-                time.sleep(0.001)  # SLEEP VERİLMEZSE PAKET SİSTEMİNDE ARIZA OLUŞUYOR.
+                time.sleep(0.01)  # SLEEP VERİLMEZSE PAKET SİSTEMİNDE ARIZA OLUŞUYOR.
             dinleyici.stop()
             return 1
 
@@ -124,9 +125,8 @@ class paket:
                                          self.dPort) + "")
             dinleyici.start()
             while self.durum:  # paket görevini tamamlayana kadar.
-                time.sleep(0.001)  # SLEEP VERİLMEZSE PAKET SİSTEMİNDE ARIZA OLUŞUYOR.
+                time.sleep(0.01)  # SLEEP VERİLMEZSE PAKET SİSTEMİNDE ARIZA OLUŞUYOR.
             dinleyici.stop()
-
 
     def donut_bekle(self, paket):
         if self.komut == "GET_FILEPART":
@@ -158,7 +158,7 @@ class server:
         # USTTEKI SATIRDA BIR PROBLEM OLURSA MANUEL OLARAK GIRILEBILIR.
         self.bagli_cihazlar = []
         self.dinleyici = AsyncSniffer().start()  # ASENKRON DINLEYİCİ BAŞLIYOR
-        self.getdosya={}
+        self.getdosya = {}
         self.dinleme()
 
         while 1:
@@ -168,7 +168,7 @@ class server:
 
     def dinleme(self):
         self.dinleyici = AsyncSniffer(prn=self.donut_bekle,
-                                 filter="udp and dst port " + str(self.dinleme_port) + "")
+                                      filter="udp and dst port " + str(self.dinleme_port) + "")
         self.dinleyici.start()
 
     def reset(self):
@@ -176,7 +176,7 @@ class server:
         self.dinleme()
 
     def donut_bekle(self, packet):
-        client_ip, client_port, data = packet.getlayer(IP).dst, packet.getlayer(IP).sport, self.raw_data_cozucu(packet)
+        client_ip, client_port, data = packet.getlayer(IP).src, packet.getlayer(IP).sport, self.raw_data_cozucu(packet)
         print("42 PORTU PAKET YAKALADI.")
         # print(packet)
 
@@ -189,8 +189,7 @@ class server:
                          komut="HANDSHAKE")
             test.calistir()
             if client_ip not in self.bagli_cihazlar:
-                self.bagli_cihazlar.append(client_ip)# clientimizi whitelist e alıyoruz.
-
+                self.bagli_cihazlar.append(client_ip)  # clientimizi whitelist e alıyoruz.
 
         """
         LS KOMUTU GELDİĞİ ZAMAN EĞER CLİENT WHITELISTTEYSE
@@ -217,13 +216,15 @@ class server:
                     temp_dosya.boyut) + ' ' + str(temp_dosya.parca_sayisi) + ' ' + str(temp_dosya.chunk_boyut)
                 temp_paket = paket(dport=client_port, sport=self.dinleme_port, dIp=client_ip, sIp=self.server_ip,
                                    komut="GET_INFO",
-                                   data=(temp_data))
+                                   data=temp_data)
                 for i in range(10):  # 10 kere  yolluyorum dosya infosunu
                     temp_paket.calistir()
+                    print("info yollanıyor")
                 temp_dosya.cache_al()
+                print("cache alındı")
                 while 1:  # Dosya Aktarılana kadar
                     if len(temp_dosya.cache) > 0:
-                        key_copy = tuple(temp_dosya.cache.keys())   # changed size during iteration error FİX
+                        key_copy = tuple(temp_dosya.cache.keys())  # changed size during iteration error FİX
 
                         for y in key_copy:  # changed size during iteration error FİX
                             # eğer bu işlemi yapmayıp, x in temp_dosya.cache yaparsam sıkıntı oluyor
@@ -233,7 +234,7 @@ class server:
                                                 komut="GET_FILEPART",
                                                 data=temp_data)
                             temp_paket2.calistir()
-                            print("gönderilen ",str(y))
+                            print("gönderilen ", str(y))
                             del temp_dosya.cache[y]
                     else:
                         break
@@ -250,9 +251,10 @@ class server:
             # test = paket(dport=84, sport=42, dIp=client_ip, sIp="192.168.1.101", komut="LS", data = "LS_OK "+' '.join(os.listdir()))
             # test.calistir()
 
-        if ("PUT_INFO" in data) and (client_ip in self.bagli_cihazlar):  # ip adresi whitelist te olmak zorunda
+        if ("PUT_INFO" in data) and (client_ip in self.bagli_cihazlar) and not (
+        os.path.exists(data[1])):  # ip adresi whitelist te olmak zorunda
 
-            print("DOSYA İSMİ -> ",data[1])
+            print("DOSYA İSMİ -> ", data[1])
             print("DOSYA BOYUTU ->", data[3])
             print("DOSYA PARCA SAYISI ->", data[4])
             print("DOSYA CHUNK SIZE ->", data[5])
@@ -268,11 +270,8 @@ class server:
                 dosya_temp.cache.update(test3.data)
                 print(dosya_temp.parca_sayisi, end=" ")
                 print(len(dosya_temp.cache), end=" ")
-
             dosya_temp.birlestir()
             print("İŞLEM TAMAMLANDI")
-
-    
 
     def raw_data_cozucu(self, paket):
         return paket.getlayer(Raw).load.decode().split(" ")

@@ -1,4 +1,5 @@
-#ATAKAN TÜRKAY 170401009
+# ATAKAN TÜRKAY 170401009
+# 1 adet bug -> serverde olan dosya tekrar servere atılırken client çöküyor.
 from scapy.all import *
 import time
 import sys
@@ -93,7 +94,7 @@ class paket:
                 send(a, verbose=False)
                 time.sleep(0.001)  # SLEEP VERİLMEZSE PAKET SİSTEMİNDE ARIZA OLUŞUYOR.
             dinleyici.stop()
-###################################################################################
+        ###################################################################################
         if self.komut == "LS":
             dinleyici = AsyncSniffer(prn=self.donut_bekle,
                                      filter="udp and src host " + str(self.dIp) + " and src port " + str(
@@ -105,7 +106,7 @@ class paket:
                 send(a, verbose=False)
                 time.sleep(1)  # SLEEP VERİLMEZSE PAKET SİSTEMİNDE ARIZA OLUŞUYOR.
             dinleyici.stop()
-####################################################################################
+        ####################################################################################
         if self.komut == "GET":
             dinleyici = AsyncSniffer(prn=self.donut_bekle,
                                      filter="udp and src host " + str(self.dIp) + " and src port " + str(
@@ -134,7 +135,7 @@ class paket:
                 send(a, verbose=False)
             self.data.clear()
         # if self.komut == "PUT":
-#############################################################################
+        #############################################################################
         if self.komut == "PUT_INFO":
             a = IP(dst=self.dIp, src=self.sIp) / UDP(dport=self.dPort, sport=self.sPort) / Raw(load=self.data)
             send(a)
@@ -149,9 +150,13 @@ class paket:
             a = IP(dst=self.dIp, src=self.sIp) / UDP(dport=self.dPort, sport=self.sPort) / Raw(load=self.data)
 
             dinleyici.start()
+            zaman = time.time()
             while self.durum:  # paket görevini tamamlayana kadar.
                 send(a)
                 time.sleep(0.001)  # SLEEP VERİLMEZSE PAKET SİSTEMİNDE ARIZA OLUŞUYOR.
+                if time.time() - zaman > 3:
+                    self.durum = 0
+                    self.data = -1
             dinleyici.stop()
             return 1
 
@@ -207,7 +212,6 @@ class paket:
                     self.durum = 0  # peket görevini tamamladı
                 # burada dosyaları return edebilir.Ftp kontrol amaçlı
 
-
     def raw_data_cozucu(self, paket):
         return paket.getlayer(Raw).load.decode().split(" ")
 
@@ -220,6 +224,7 @@ class client:
         self.client_ip = client_ip  # LOCAL IP ADRESIMIZI OGRENMEMIZI SAGLIYOR
         # USTTEKI SATIRDA BIR PROBLEM OLURSA MANUEL OLARAK GIRILEBILIR.
 
+
     def menu(self):
         print("FTP İSTEMCİSİNE HOŞGELDİN")
         print("IP -> ", self.client_ip, ":", self.dinleme_port)
@@ -228,7 +233,7 @@ class client:
         test = paket(dport=self.server_port, sport=self.dinleme_port, dIp=server_ip, sIp=self.client_ip,
                      komut="HANDSHAKE")
         test.calistir()
-        test2 = paket(dport=self.server_port, sport=self.dinleme_port, dIp=self.client_ip, sIp=self.client_ip,
+        test2 = paket(dport=self.server_port, sport=self.dinleme_port, dIp=server_ip, sIp=self.client_ip,
                       komut="LS")
         test2.calistir()
 
@@ -244,12 +249,12 @@ class client:
             secenek = input("İŞLEM NUMARASI = ")
 
             if secenek == "1":
-                test2 = paket(dport=self.server_port, sport=self.dinleme_port, dIp=self.client_ip, sIp=self.client_ip,
+                test2 = paket(dport=self.server_port, sport=self.dinleme_port, dIp=server_ip, sIp=self.client_ip,
                               komut="LS")
                 test2.calistir()
             elif secenek == "2":
                 dosya_secenek = input("Dosya ismi = ")
-                test3 = paket(dport=self.server_port, sport=self.dinleme_port, dIp=self.client_ip, sIp=self.client_ip,
+                test3 = paket(dport=self.server_port, sport=self.dinleme_port, dIp=server_ip, sIp=self.client_ip,
                               komut="GET",
                               data=dosya_secenek)
                 test3.calistir()
@@ -267,13 +272,14 @@ class client:
                                        parca_sayisi=test3.data[4])
 
                     while int(dosya_temp.parca_sayisi) != len(dosya_temp.cache):
-                        test3 = paket(dport=self.server_port, sport=self.dinleme_port, dIp=self.client_ip, sIp=self.client_ip,
+                        test3 = paket(dport=self.server_port, sport=self.dinleme_port, dIp=server_ip,
+                                      sIp=self.client_ip,
                                       komut="GET_FILE")
                         test3.calistir()
                         dosya_temp.cache.update(test3.data)
                         temp_len = len(dosya_temp.cache)
-                        print(dosya_temp.parca_sayisi,"/",str(temp_len))
-                    test3 = paket(dport=self.server_port, sport=self.dinleme_port, dIp=self.client_ip, sIp=self.client_ip,
+                        print(dosya_temp.parca_sayisi, "/", str(temp_len))
+                    test3 = paket(dport=self.server_port, sport=self.dinleme_port, dIp=server_ip, sIp=self.client_ip,
                                   komut="GET_FILE_END")
                     test3.calistir()
                     print("DOSYA ALINDI")
@@ -300,7 +306,9 @@ class client:
                         test3.calistir()
                     temp_dosya.cache_al()
                     while 1:  # Dosya Aktarılana kadar
+
                         if len(temp_dosya.cache) > 0:
+
                             key_copy = tuple(temp_dosya.cache.keys())  # changed size during iteration error FİX
 
                             for y in key_copy:  # changed size during iteration error FİX
@@ -311,6 +319,7 @@ class client:
                                                     komut="PUT_FILEPART",
                                                     data=temp_data)
                                 temp_paket2.calistir()
+
                                 del temp_dosya.cache[y]
                         else:
                             break
@@ -329,8 +338,8 @@ class client:
 cli = client()
 cli.menu()
 
-# test2 = paket(dport=self.server_port, sport=self.dinleme_port, dIp=self.client_ip, sIp=self.client_ip, komut="LS")
-# test3 = paket(dport=self.server_port, sport=self.dinleme_port, dIp=self.client_ip, sIp=self.client_ip, komut="GET",data="test.png")
+# test2 = paket(dport=self.server_port, sport=self.dinleme_port, dIp=server_ip, sIp=self.client_ip, komut="LS")
+# test3 = paket(dport=self.server_port, sport=self.dinleme_port, dIp=server_ip, sIp=self.client_ip, komut="GET",data="test.png")
 
 
 # test2.calistir()
