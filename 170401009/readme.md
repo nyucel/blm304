@@ -39,5 +39,6 @@ GET İLE BENZER MANTIKTA ÇALIŞMAKTADIR.
 ```
 
 
-## default chunkize = 512 byte
+## default chunksize = 512 byte
 ## windows üzerinde listen yaparken problemler yaşadığım için delay koymak zorunda kaldım. 0.001sn
+## Asyncsniffer kullandım. bunu hız düşüklüğünün sebebi olarak düşünüyorum.
