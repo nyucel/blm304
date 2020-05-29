@@ -1,3 +1,5 @@
+#ATAKAN TÜRKAY 170401009
+
 from scapy.all import *
 import time
 import sys
@@ -106,7 +108,7 @@ class paket:
             dinleyici.start()
             while self.durum:  # paket görevini tamamlayana kadar.
                 send(a)
-                time.sleep(0.001)  # SLEEP VERİLMEZSE PAKET SİSTEMİNDE ARIZA OLUŞUYOR.
+                time.sleep(0.00001)  # SLEEP VERİLMEZSE PAKET SİSTEMİNDE ARIZA OLUŞUYOR.
             dinleyici.stop()
             return 1
 
@@ -122,7 +124,7 @@ class paket:
                                          self.dPort) + "")
             dinleyici.start()
             while self.durum:  # paket görevini tamamlayana kadar.
-                time.sleep(0.001)  # SLEEP VERİLMEZSE PAKET SİSTEMİNDE ARIZA OLUŞUYOR.
+                time.sleep(0.00001)  # SLEEP VERİLMEZSE PAKET SİSTEMİNDE ARIZA OLUŞUYOR.
             dinleyici.stop()
 
 
@@ -162,7 +164,7 @@ class server:
         while 1:
             print(self.server_ip, ":", self.dinleme_port, " Dinliyor...")
             print(len(self.bagli_cihazlar))
-            time.sleep(0.001)
+            time.sleep(1)
 
     def dinleme(self):
         self.dinleyici = AsyncSniffer(prn=self.donut_bekle,
@@ -231,6 +233,7 @@ class server:
                                                 komut="GET_FILEPART",
                                                 data=temp_data)
                             temp_paket2.calistir()
+                            print("gönderilen ",str(y))
                             del temp_dosya.cache[y]
                     else:
                         break
@@ -269,19 +272,7 @@ class server:
             dosya_temp.birlestir()
             print("İŞLEM TAMAMLANDI")
 
-    def Dosya_listesi(self):
-
-        print("test")
-
-    def Server_dosya_gonder(self):
-        print("test")
-
-    def Server_dosya_al(self):
-
-        print("test")
-
-    def calistir(self):
-        print("test")
+    
 
     def raw_data_cozucu(self, paket):
         return paket.getlayer(Raw).load.decode().split(" ")

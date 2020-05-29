@@ -64,7 +64,7 @@ class dosya:
                 f.read(8192)
             f.close()
         return file_hash.hexdigest()
-
+#ATAKAN TÜRKAY 170401009
 
 class paket:
     def __init__(self, dport=0, sport=0, dIp="", sIp="", data={}, komut=""):
@@ -90,9 +90,9 @@ class paket:
             dinleyici.start()
             while self.durum:  # paket görevini tamamlayana kadar.
                 send(a, verbose=False)
-                time.sleep(0.001)  # SLEEP VERİLMEZSE PAKET SİSTEMİNDE ARIZA OLUŞUYOR.
+                time.sleep(0.00001)  # SLEEP VERİLMEZSE PAKET SİSTEMİNDE ARIZA OLUŞUYOR.
             dinleyici.stop()
-
+###################################################################################
         if self.komut == "LS":
             dinleyici = AsyncSniffer(prn=self.donut_bekle,
                                      filter="udp and src host " + str(self.dIp) + " and src port " + str(
@@ -123,7 +123,7 @@ class paket:
                                          self.dPort) + "")
             dinleyici.start()
             while self.durum:  # paket görevini tamamlayana kadar.
-                time.sleep(0.001)  # SLEEP VERİLMEZSE PAKET SİSTEMİNDE ARIZA OLUŞUYOR.
+                time.sleep(0.00001)  # SLEEP VERİLMEZSE PAKET SİSTEMİNDE ARIZA OLUŞUYOR.
             dinleyici.stop()
         if self.komut == "GET_FILE_END":
 
@@ -150,7 +150,7 @@ class paket:
             dinleyici.start()
             while self.durum:  # paket görevini tamamlayana kadar.
                 send(a)
-                time.sleep(0.001)  # SLEEP VERİLMEZSE PAKET SİSTEMİNDE ARIZA OLUŞUYOR.
+                time.sleep(0.00001)  # SLEEP VERİLMEZSE PAKET SİSTEMİNDE ARIZA OLUŞUYOR.
             dinleyici.stop()
             return 1
 
@@ -270,8 +270,8 @@ class client:
                                       komut="GET_FILE")
                         test3.calistir()
                         dosya_temp.cache.update(test3.data)
-                        print(dosya_temp.parca_sayisi, end=" ")
-                        print(len(dosya_temp.cache), end=" ")
+                        temp_len = len(dosya_temp.cache)
+                        print(dosya_temp.parca_sayisi,"/",str(temp_len))
                     test3 = paket(dport=self.server_port, sport=self.dinleme_port, dIp=self.client_ip, sIp=self.client_ip,
                                   komut="GET_FILE_END")
                     test3.calistir()

@@ -1,1 +1,0 @@
-from scapy.all import *
