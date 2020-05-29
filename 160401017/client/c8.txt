@@ -1,0 +1,9 @@
+uick demo : an interactive session
+If you are new to python and you really don't understand a word because of that, or if you want to learn this language, take an hour to read the very good tutorial from Guido Van Rossum here: http://docs.python.org/tutorial/. After that, you'll know python :) (really!). For a more in-depth tutorial Dive Into Python is a very good start too.
+Scapy uses the python interpreter as a command board. That means that you can use directly python language (assign variables, use loops, define functions, etc.)
+
+The idea is simple. Scapy mainly does two things : sending packets and receiving answers. You define a set of packets, it sends them, receives answers, matches requests with answers and returns a list of packet couples (request, answer) and a list of unmatched packets. This has the big advantage over tools like nmap or hping that an answer is not reduced to (open/closed/filtered), but is the whole packet.
+
+On top of this can be build more high level functions, for example one that does traceroutes and give as a result only the start TTL of the request and the source IP of the answer. One that pings a whole network and gives the list of machines answering. One that does a portscan and returns a LaTeX report.
+
+First, we play a bit and create 4 IP packets at once. Let's see how it works. We first instantiate the IP class. Then, we instantiate it again and we provide a destination that is worth 4 IP addresses (/30 gives the netmask). Using a Python idiom, we develop this implicit packet in a set of explicit packets.
