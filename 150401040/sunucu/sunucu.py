@@ -62,8 +62,6 @@ while 1:
 				
 				except socket.error:
 					print("Dosya Gonderilemedi")
-				#if(i<int(size)):
-					#print("gonderilemedi")
 				ssock.close()
 				f.close()
 			else:
@@ -87,7 +85,7 @@ while 1:
 						dosya=ssock.recvfrom(buf)[0]
 						f.write(dosya)
 						i+=1
-						print(i)
+						print("{}. dosya parcasi alindi".format(i))
 						ssock.settimeout(3)
 				except socket.timeout:
 					f.close()
@@ -97,4 +95,4 @@ while 1:
 		else:
 			print("Yanlıs komut girdiniz")		
 	except socket.timeout:
-		print("HATAAAAAAAAA")	
+		print("HATA BULUNDU")	
