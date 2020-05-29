@@ -1,6 +1,4 @@
-Python 3.8.3 (tags/v3.8.3:6f8c832, May 13 2020, 22:20:19) [MSC v.1925 32 bit (Intel)] on win32
-Type "help", "copyright", "credits" or "license()" for more information.
->>> 
+
 #150401014 Furkan DEMİR
 
 import socket
@@ -22,7 +20,7 @@ def dosyaList():
 while True:
     data,addr = socket.recvfrom(1024)
     gelen = data.decode('UTF-8')
-    if (gelen[:4] =='listele'):
+    if (gelen[:4] =='liste'):
         dosyaList()
     elif (gelen[:3] == 'put'):
         with open('recv.txt', 'wb') as file:
