@@ -63,6 +63,7 @@ class MyFTPClient(object):
                                 self.dsocket.sendto(fdata, (self.server_address[0],DPORT))
                                 fdata = file.readline(1024)
                         print(str(self.dsocket.recv(1024),'utf-8'))
+                        self.dsocket.recv(1024)
                     else:
                         print("File doesn't exist. Please check the file location and try again.")
                 except socket.timeout :
