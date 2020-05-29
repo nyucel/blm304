@@ -1,5 +1,4 @@
 #Batuhan METİN - 160401075
-
 import socket
 import time
 import os
