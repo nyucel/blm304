@@ -1,1 +1,1 @@
-Veri Haberleşmesi Vize Ödevi
+Veri Haberleşmesi Vize Ödev
