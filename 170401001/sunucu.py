@@ -7,8 +7,8 @@ import socket
 import time
 
 port = 42
-#ip = input("Sunucunun local ipv4 adresini giriniz: ")
-ip = 'localhost'
+ip = input("Lutfen bir sey girmeden enter'a basiniz.")
+#ip = 'localhost'
 # TODO: automate this
 buf = 1024
 
@@ -30,8 +30,8 @@ while(True):
     #	sys.exit()
     print("Sunucu dinlemede...")
     received_bytes = s.recvfrom(buf)        # istemciden veri bekleniyor
-    print(received_bytes[0])
-    print(received_bytes[1])
+    #print(received_bytes[0])
+    #print(received_bytes[1])
 
     client_message = received_bytes[0].decode()    #
     print(client_message)
@@ -49,6 +49,7 @@ while(True):
 
     if request == 'GET':
         directory = os.listdir()
+        time.sleep(0.1)
         if filename in directory:
             send_this_file_name = filename.encode()
             s.sendto(send_this_file_name, client_address)
@@ -81,17 +82,15 @@ while(True):
 
     if request == 'PUT':
         data = s.recvfrom(buf)[0]
+		
         f = open(data.strip(),'wb')
         data = s.recvfrom(buf)[0]
         try:
             while(data):
                 data = s.recvfrom(buf)[0]
                 f.write(data)
-
-                s.settimeout(7)             # 7 sn boyunca hic veri gelmezse dosya bu kadar heralde diyip dosyayi kapatiyoruz.
+                s.settimeout(10)             # 7 sn boyunca hic veri gelmezse dosya bu kadar heralde diyip dosyayi kapatiyoruz.
         except socket.timeout:
-
             f.close()
-
         s.sendto(b'True', client_address)
         s.close()
