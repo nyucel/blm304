@@ -108,7 +108,7 @@ class paket:
             dinleyici.start()
             while self.durum:  # paket görevini tamamlayana kadar.
                 send(a)
-                time.sleep(0.00001)  # SLEEP VERİLMEZSE PAKET SİSTEMİNDE ARIZA OLUŞUYOR.
+                time.sleep(0.001)  # SLEEP VERİLMEZSE PAKET SİSTEMİNDE ARIZA OLUŞUYOR.
             dinleyici.stop()
             return 1
 
@@ -124,7 +124,7 @@ class paket:
                                          self.dPort) + "")
             dinleyici.start()
             while self.durum:  # paket görevini tamamlayana kadar.
-                time.sleep(0.00001)  # SLEEP VERİLMEZSE PAKET SİSTEMİNDE ARIZA OLUŞUYOR.
+                time.sleep(0.001)  # SLEEP VERİLMEZSE PAKET SİSTEMİNDE ARIZA OLUŞUYOR.
             dinleyici.stop()
 
 
