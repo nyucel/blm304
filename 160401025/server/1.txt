@@ -1,0 +1,2 @@
+Örnekte var olan bir klasörüm ve olmayan bir klasörümü sorguladım. Ardından var olan bir dosya ve olmayan bir dosyayı sorguladım, başarıyla True ve False değerlerini görebildim.
+Elinizde bir dosya yolu olsun, burdaki dosya yolundan dosyanın adını ve uzantısını ayrı ayrı çekmek istiyorsunuz. O zaman path.split() ve path.splitext() methodları yardımınıza koşar.
