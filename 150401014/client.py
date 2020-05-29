@@ -1,6 +1,4 @@
-Python 3.8.3 (tags/v3.8.3:6f8c832, May 13 2020, 22:20:19) [MSC v.1925 32 bit (Intel)] on win32
-Type "help", "copyright", "credits" or "license()" for more information.
->>> 
+
 # 150401014 Furkan DEMİR
 import socket
 import sys
@@ -15,7 +13,7 @@ socket = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 while True:
     message = input('\n Liste komutunu ile dizini listeleyebilirsiniz\n PUT dosya adı ile dosya yükleyebilirsiniz\n GET dosya adı ile dosya indirebilirsiniz\n')
     socket.sendto(message.encode('UTF-8'),ADDR)
-    if(message[:5] == 'listele'):
+    if(message[:4] == 'liste'):
         dizin,addr = socket.recvfrom(1024) 
         dizinList = pickle.loads(dizin)
         print(dizinList)
