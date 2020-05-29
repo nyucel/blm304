@@ -9,7 +9,7 @@ import socket
 import sys, time
 import os
 IP = "127.0.0.1"
-PORT = 10020
+PORT = 42
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
