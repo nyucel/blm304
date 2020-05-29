@@ -17,7 +17,6 @@ import cmd
 import time
 
 from ftpclient import myftpclient as client
-from scapy.all import *
 
 GREEN = '\033[92m'
 END = '\033[0m'
