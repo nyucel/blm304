@@ -1,0 +1,212 @@
+*****************SERVER***********************
+
+ftpCredentials = FtpCredentials("mete", "password")
+ftpData = FtpData(1, True, "Merhaba")
+# ftpResult = FtpResult(200, "OK")
+ftpMessage = FtpMessage("#1234", "Register", ftpCredentials, ftpData)
+
+print("Printing to check how it will look like")
+print(FtpMessageEncoder().encode(ftpMessage))
+
+print("Encode Employee Object into JSON formatted Data using custom JSONEncoder")
+ftpJSONData = json.dumps(ftpMessage, indent=4, cls=FtpMessageEncoder)
+
+print(ftpJSONData)
+
+print("Decode JSON formatted Data")
+ftpMessageDecoded = json.loads(ftpJSONData)
+print(ftpMessageDecoded)
+
+print(ftpMessageDecoded['session_id'])
+print(ftpMessageDecoded['data']['content'])
+ftpCredentials = FtpCredentials("mete", "password")
+ftpData = FtpData(1, True, "Merhaba")
+# ftpResult = FtpResult(200, "OK")
+ftpMessage = FtpMessage("#1234", "Register", ftpCredentials, ftpData)
+
+print("Printing to check how it will look like")
+print(FtpMessageEncoder().encode(ftpMessage))
+
+print("Encode Employee Object into JSON formatted Data using custom JSONEncoder")
+ftpJSONData = json.dumps(ftpMessage, indent=4, cls=FtpMessageEncoder)
+
+print(ftpJSONData)
+
+print("Decode JSON formatted Data")
+ftpMessageDecoded = json.loads(ftpJSONData)
+print(ftpMessageDecoded)
+
+print(ftpMessageDecoded['session_id'])
+print(ftpMessageDecoded['data']['content'])
+
+ftpCredentials = FtpCredentials("mete", "password")
+ftpData = FtpData(1, True, "Merhaba")
+# ftpResult = FtpResult(200, "OK")
+ftpMessage = FtpMessage("#1234", "Register", ftpCredentials, ftpData)
+
+print("Printing to check how it will look like")
+print(FtpMessageEncoder().encode(ftpMessage))
+
+print("Encode Employee Object into JSON formatted Data using custom JSONEncoder")
+ftpJSONData = json.dumps(ftpMessage, indent=4, cls=FtpMessageEncoder)
+
+print(ftpJSONData)
+
+print("Decode JSON formatted Data")
+ftpMessageDecoded = json.loads(ftpJSONData)
+print(ftpMessageDecoded)
+
+print(ftpMessageDecoded['session_id'])
+print(ftpMessageDecoded['data']['content'])
+ftpCredentials = FtpCredentials("mete", "password")
+ftpData = FtpData(1, True, "Merhaba")
+# ftpResult = FtpResult(200, "OK")
+ftpMessage = FtpMessage("#1234", "Register", ftpCredentials, ftpData)
+
+print("Printing to check how it will look like")
+print(FtpMessageEncoder().encode(ftpMessage))
+
+print("Encode Employee Object into JSON formatted Data using custom JSONEncoder")
+ftpJSONData = json.dumps(ftpMessage, indent=4, cls=FtpMessageEncoder)
+
+print(ftpJSONData)
+
+print("Decode JSON formatted Data")
+ftpMessageDecoded = json.loads(ftpJSONData)
+print(ftpMessageDecoded)
+
+print(ftpMessageDecoded['session_id'])
+print(ftpMessageDecoded['data']['content'])
+ftpCredentials = FtpCredentials("mete", "password")
+ftpData = FtpData(1, True, "Merhaba")
+# ftpResult = FtpResult(200, "OK")
+ftpMessage = FtpMessage("#1234", "Register", ftpCredentials, ftpData)
+
+print("Printing to check how it will look like")
+print(FtpMessageEncoder().encode(ftpMessage))
+
+print("Encode Employee Object into JSON formatted Data using custom JSONEncoder")
+ftpJSONData = json.dumps(ftpMessage, indent=4, cls=FtpMessageEncoder)
+
+print(ftpJSONData)
+
+print("Decode JSON formatted Data")
+ftpMessageDecoded = json.loads(ftpJSONData)
+print(ftpMessageDecoded)
+
+print(ftpMessageDecoded['session_id'])
+print(ftpMessageDecoded['data']['content'])
+ftpCredentials = FtpCredentials("mete", "password")
+ftpData = FtpData(1, True, "Merhaba")
+# ftpResult = FtpResult(200, "OK")
+ftpMessage = FtpMessage("#1234", "Register", ftpCredentials, ftpData)
+
+print("Printing to check how it will look like")
+print(FtpMessageEncoder().encode(ftpMessage))
+
+print("Encode Employee Object into JSON formatted Data using custom JSONEncoder")
+ftpJSONData = json.dumps(ftpMessage, indent=4, cls=FtpMessageEncoder)
+
+print(ftpJSONData)
+
+print("Decode JSON formatted Data")
+ftpMessageDecoded = json.loads(ftpJSONData)
+print(ftpMessageDecoded)
+
+print(ftpMessageDecoded['session_id'])
+print(ftpMessageDecoded['data']['content'])
+ftpCredentials = FtpCredentials("mete", "password")
+ftpData = FtpData(1, True, "Merhaba")
+# ftpResult = FtpResult(200, "OK")
+ftpMessage = FtpMessage("#1234", "Register", ftpCredentials, ftpData)
+
+print("Printing to check how it will look like")
+print(FtpMessageEncoder().encode(ftpMessage))
+
+print("Encode Employee Object into JSON formatted Data using custom JSONEncoder")
+ftpJSONData = json.dumps(ftpMessage, indent=4, cls=FtpMessageEncoder)
+
+print(ftpJSONData)
+
+print("Decode JSON formatted Data")
+ftpMessageDecoded = json.loads(ftpJSONData)
+print(ftpMessageDecoded)
+
+print(ftpMessageDecoded['session_id'])
+print(ftpMessageDecoded['data']['content'])
+ftpCredentials = FtpCredentials("mete", "password")
+ftpData = FtpData(1, True, "Merhaba")
+# ftpResult = FtpResult(200, "OK")
+ftpMessage = FtpMessage("#1234", "Register", ftpCredentials, ftpData)
+
+print("Printing to check how it will look like")
+print(FtpMessageEncoder().encode(ftpMessage))
+
+print("Encode Employee Object into JSON formatted Data using custom JSONEncoder")
+ftpJSONData = json.dumps(ftpMessage, indent=4, cls=FtpMessageEncoder)
+
+print(ftpJSONData)
+
+print("Decode JSON formatted Data")
+ftpMessageDecoded = json.loads(ftpJSONData)
+print(ftpMessageDecoded)
+
+print(ftpMessageDecoded['session_id'])
+print(ftpMessageDecoded['data']['content'])
+ftpCredentials = FtpCredentials("mete", "password")
+ftpData = FtpData(1, True, "Merhaba")
+# ftpResult = FtpResult(200, "OK")
+ftpMessage = FtpMessage("#1234", "Register", ftpCredentials, ftpData)
+
+print("Printing to check how it will look like")
+print(FtpMessageEncoder().encode(ftpMessage))
+
+print("Encode Employee Object into JSON formatted Data using custom JSONEncoder")
+ftpJSONData = json.dumps(ftpMessage, indent=4, cls=FtpMessageEncoder)
+
+print(ftpJSONData)
+
+print("Decode JSON formatted Data")
+ftpMessageDecoded = json.loads(ftpJSONData)
+print(ftpMessageDecoded)
+
+print(ftpMessageDecoded['session_id'])
+print(ftpMessageDecoded['data']['content'])
+ftpCredentials = FtpCredentials("mete", "password")
+ftpData = FtpData(1, True, "Merhaba")
+# ftpResult = FtpResult(200, "OK")
+ftpMessage = FtpMessage("#1234", "Register", ftpCredentials, ftpData)
+
+print("Printing to check how it will look like")
+print(FtpMessageEncoder().encode(ftpMessage))
+
+print("Encode Employee Object into JSON formatted Data using custom JSONEncoder")
+ftpJSONData = json.dumps(ftpMessage, indent=4, cls=FtpMessageEncoder)
+
+print(ftpJSONData)
+
+print("Decode JSON formatted Data")
+ftpMessageDecoded = json.loads(ftpJSONData)
+print(ftpMessageDecoded)
+
+print(ftpMessageDecoded['session_id'])
+print(ftpMessageDecoded['data']['content'])
+ftpCredentials = FtpCredentials("mete", "password")
+ftpData = FtpData(1, True, "Merhaba")
+# ftpResult = FtpResult(200, "OK")
+ftpMessage = FtpMessage("#1234", "Register", ftpCredentials, ftpData)
+
+print("Printing to check how it will look like")
+print(FtpMessageEncoder().encode(ftpMessage))
+
+print("Encode Employee Object into JSON formatted Data using custom JSONEncoder")
+ftpJSONData = json.dumps(ftpMessage, indent=4, cls=FtpMessageEncoder)
+
+print(ftpJSONData)
+
+print("Decode JSON formatted Data")
+ftpMessageDecoded = json.loads(ftpJSONData)
+print(ftpMessageDecoded)
+
+print(ftpMessageDecoded['session_id'])
+print(ftpMessageDecoded['data']['content'])
