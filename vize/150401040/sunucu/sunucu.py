@@ -1,4 +1,3 @@
-
 #Selin Gül -150401040
 #server
 import socket
@@ -46,7 +45,7 @@ while 1:
 				ssock.sendto(dosya,cAdres)
 
 				parcaSayisi=int(size)/buf+1
-				i=0
+				i=1
 				while dosya:
 					if ssock.sendto(dosya,cAdres):
 						print("{}. dosya parcasi gonderildi".format(i))
@@ -62,8 +61,6 @@ while 1:
 				
 				except socket.error:
 					print("Dosya Gonderilemedi")
-				#if(i<int(size)):
-					#print("gonderilemedi")
 				ssock.close()
 				f.close()
 			else:
@@ -78,7 +75,6 @@ while 1:
 				print("Yanlis dosya adi girildi")
 			else:
 				db=int(boyut.decode())/buf+1
-				print(boyut.decode())
 				i=0
 				f=open(komut[1],"wb")
 				dosya=ssock.recvfrom(buf)[0]
@@ -87,7 +83,7 @@ while 1:
 						dosya=ssock.recvfrom(buf)[0]
 						f.write(dosya)
 						i+=1
-						print(i)
+						print("{}. dosya parcasi alindi".format(i))
 						ssock.settimeout(3)
 				except socket.timeout:
 					f.close()
@@ -97,4 +93,4 @@ while 1:
 		else:
 			print("Yanlıs komut girdiniz")		
 	except socket.timeout:
-		print("HATAAAAAAAAA")	
+		print("BIR HATA BULUNDU")	
