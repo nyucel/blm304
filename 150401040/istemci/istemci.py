@@ -1,3 +1,4 @@
+#Selin Gül 150401040
 #client
 import socket
 import os
@@ -21,7 +22,7 @@ sGelen=csock.recvfrom(buf)##
 liste="Yuklenmis dosyalar  {}".format(sGelen[0].decode('utf-8'))
 print(liste)
 
-girdi=input("\n->GET dosyaAdi\n->PUT dosyaAdi\n")
+girdi=input("\n->GET dosyaAdi.dosyaUzantisi\n->PUT dosyaAdi.dosyaUzantisi\n")
 komutGiden=str.encode(girdi)
 csock.sendto(komutGiden,(IP,PORT))###
 komutGiden=girdi.split()
@@ -29,7 +30,6 @@ try:
 	if (komutGiden[0]=='GET'):
 		boyut=csock.recvfrom(buf)[0]
 		db=int(boyut.decode())/buf+1
-		print(db)
 		i=0
 
 		if boyut.decode()=="error":
@@ -85,5 +85,5 @@ try:
 			else:
 				csock.sendto(b"error",(IP,PORT))
 				csock.close()
-except socket.timeout:
-	print("HATA BULUNDU")
+except socket.error:
+	print("BIR HATA BULUNDU")
