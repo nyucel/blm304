@@ -14,7 +14,7 @@ s = socket.socket()
 
 # Bağlanılacak adres ve port
 host = "192.168.1.32"
-port = 42                
+port = 142                
 
 try:
     # Bağlantıyı yap
