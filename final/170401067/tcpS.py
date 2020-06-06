@@ -46,7 +46,7 @@ def ilerletilmisSaat(gecikme):                          #gecikmeyi saatimize ekl
     return zamanDuzenli.encode()
 
 host = "192.168.1.32"
-port = 142
+port = 42
 utc = 3
 
 try:
@@ -68,4 +68,6 @@ while True:
     gecikme = gecikmeHesapla()
     data = ilerletilmisSaat(gecikme)
     c.send(data)
+    zamandilimi = 'utc' + str(utc)
+    c.send(zamandilimi.encode())
     c.close()

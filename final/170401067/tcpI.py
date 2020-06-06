@@ -14,7 +14,7 @@ s = socket.socket()
 
 # Bağlanılacak adres ve port
 host = "192.168.1.32"
-port = 142                
+port = 42                
 
 try:
     # Bağlantıyı yap
@@ -31,6 +31,8 @@ try:
     
     komut = komut + s.recv(1024).decode() + '"' #gerekli terminal komutun hazırlanması
     print(komut)
+    zamandilimi = s.recv(1024)
+    print(zamandilimi.decode())
     os.system(komut)                            #komutun çalıştırılması
     s.close() 
 except socket.error as msg:
