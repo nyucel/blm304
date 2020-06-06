@@ -1,3 +1,4 @@
+#Selin GÜL 150401040
 #client
 import socket
 import os
@@ -21,7 +22,7 @@ sGelen=csock.recvfrom(buf)##
 liste="Yuklenmis dosyalar  {}".format(sGelen[0].decode('utf-8'))
 print(liste)
 
-girdi=input("\n*GET dosyaAdi\n*PUT dosyaAdi\n")
+girdi=input("\n->GET dosyaAdi\n->PUT dosyaAdi\n")
 komutGiden=str.encode(girdi)
 csock.sendto(komutGiden,(IP,PORT))###
 komutGiden=girdi.split()
@@ -29,7 +30,6 @@ try:
 	if (komutGiden[0]=='GET'):
 		boyut=csock.recvfrom(buf)[0]
 		db=int(boyut.decode())/buf+1
-		print(db)
 		i=0
 
 		if boyut.decode()=="error":
@@ -43,11 +43,10 @@ try:
 					dosya=csock.recvfrom(buf)[0]
 					f.write(dosya)
 					i+=1
-					print(i)
+					print("{}. dosya parcasi alindi".format(i))
 					csock.settimeout(3)
 			except socket.error:
 				f.close()
-				print("Baglantı hatasi olustu")
 			csock.sendto(b"True",(IP,PORT))	
 			csock.close()
 			
@@ -75,9 +74,8 @@ try:
 						print("{}. dosya parcasi gonderildi".format(i))
 						
 				try:
-					#csock.settimeout(5)
+					csock.settimeout(5)
 					kontrol=csock.recvfrom(buf)[0].decode()
-					#if kontrol=='True':
 					print("Dosya Gonderildi")
 				
 				except socket.timeout:
@@ -87,5 +85,5 @@ try:
 			else:
 				csock.sendto(b"error",(IP,PORT))
 				csock.close()
-except socket.timeout:
-	print("HATAAAAA")
+except socket.error:
+	print("BIR HATA BULUNDU")
