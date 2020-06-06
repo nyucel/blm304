@@ -46,7 +46,7 @@ def ilerletilmisSaat(gecikme):                          #gecikmeyi saatimize ekl
     return zamanDuzenli.encode()
 
 host = "192.168.1.32"
-port = 42
+port = 142
 utc = 3
 
 try:
