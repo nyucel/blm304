@@ -134,7 +134,7 @@ def komutAl(secim):
                 put(dosyaAdi)
 
 s = socket(AF_INET, SOCK_DGRAM)
-host = gethostbyname(gethostname())
+host = ""
 port = 42
 buf = 4096
 s.bind((host, port))
