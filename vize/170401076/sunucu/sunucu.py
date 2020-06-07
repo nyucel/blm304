@@ -6,7 +6,7 @@ import time
 
 
 sct = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-IP = socket.gethostbyname(socket.gethostname())
+IP = ""
 port = 42
 size = 32768
 
