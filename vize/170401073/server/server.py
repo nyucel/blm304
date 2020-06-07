@@ -4,7 +4,7 @@ import os
 import sys
 import time
 
-sunucu_ip=str(socket.gethostbyname(socket.gethostname()))
+sunucu_ip=""
 sunucu_port=42
 sunucu=(sunucu_ip,sunucu_port)
 buffer=32768
@@ -13,7 +13,7 @@ sunucu_socket.bind(sunucu)
 #buffer boyutum 32KB
 
 print("SUNUCU HAZIR")
-print("SUNUCU IP ADRESI : ",sunucu_ip)
+
 
 #paketleri okunabilir hale getirmek ve gonderebilmek icin encode ve decode islemleri
 def decode_yap(x):
