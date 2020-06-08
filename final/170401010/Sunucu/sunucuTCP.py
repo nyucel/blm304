@@ -2,7 +2,7 @@
 """
 Created on Wed Jun  3 14:50:46 2020
 
-@author: lenovoz
+@author: Baran Akçakaya-170401010
 """
 import socket
 from datetime import datetime
