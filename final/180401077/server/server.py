@@ -8,7 +8,7 @@ import threading
 
 class server():
     def __init__(self):
-        self.UTC = 0
+        self.UTC = datetime.now().hour-datetime.utcnow().hour
         self.PORT = 142
         self.HOST = socket.gethostbyname(socket.gethostname()+".local")
         print(f"Serverın adresi..: {self.HOST}")
