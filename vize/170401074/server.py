@@ -1,10 +1,10 @@
 import time
 import socket
 import os
-#Batuhan ÖZALP - 170401074
-IP = str(socket.gethostbyname(socket.gethostname() + ".local"))
+
+IP = ""#str(socket.gethostbyname(socket.gethostname() + ".local"))
 port   = 42
-print("IP Adresi >>", IP)
+#print("IP Adresi >>", IP)
 buffer  = 65000
 
 def main():
