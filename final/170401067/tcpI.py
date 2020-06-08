@@ -2,7 +2,7 @@
 """
 Created on Wed Jun  3 22:26:03 2020
 
-@author: EnesNK
+@author: Enes Nurullah Kendirci 170401067
 """
 
 import socket                
