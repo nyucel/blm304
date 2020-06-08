@@ -2,7 +2,7 @@
 """
 Created on Wed Jun  3 15:05:29 2020
 
-@author: lenovoz
+@author: Baran Akçakaya-170401010
 """
 import socket
 import os
