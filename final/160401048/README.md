@@ -1,6 +1,6 @@
 # Sunucu
 
-Sunucuyu başlatmak kullanmanız gereken komut:
+Sunucuyu başlatmak için kullanmanız gereken komut:
 
 ```
 sudo python3 server.py
