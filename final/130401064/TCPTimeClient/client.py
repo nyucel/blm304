@@ -1,4 +1,4 @@
-# süleyman baltacý 130401064
+ï»¿# SÃ¼leyman BaltacÄ± 130401064
 import socket
 import datetime
 import win32api
