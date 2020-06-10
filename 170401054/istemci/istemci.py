@@ -1,40 +1,30 @@
-from socket import *
-import pickle
-import sys
-import os
+import socket
 import time
-import select
+import subprocess
+import shlex
+import pickle
+import datetime
+from datetime import datetime
 
-def get(filename):
-    veri , adres= senderSocket.recvfrom(1024)
-    dosya = open(filename, 'wb')
-    dosya.write(veri)
-    dosya.close()
-    print("Dosya başarıyla alındı.")
+host = "127.0.0.1"
+port = 142
 
-def put(filename):
-    dosya = open(filename, 'rb')
-    dosya2 = dosya.read()
-    senderSocket.sendto(dosya2, (senderIP, senderPort))
-    print("Dosya başarıyla yollandı.")
 
-senderIP = input(str("IP adresini giriniz: "))
-senderPort = 42
+baslangic=datetime.now() #Gecikmeyi hesaplamak için başlangıç saati
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client.connect((host,port))
 
-senderSocket = socket(AF_INET, SOCK_DGRAM)
-senderSocket.bind((senderIP,senderPort))
-Listemiz, addres = senderSocket.recvfrom(1024)
-print("Yüklenmiş dosyalar:", Listemiz.decode())
 
-komut=input(str("Almak için GET, koymak için PUT -> Komut seçiniz:  "))
-komut2=komut.encode()
-senderSocket.sendto(komut2,(senderIP,senderPort))
+zaman,address=client.recvfrom(1024)
+zaman=pickle.loads(zaman)
+zaman=zaman[0]
+bitis=datetime.now() #Gecikmeyi hesaplamak için bitiş saati
+sonzaman=bitis.microsecond - baslangic.microsecond
 
-filename=input(str("Dosya adını giriniz: "))
-filename2=filename.encode()
-senderSocket.sendto(filename2,(senderIP,senderPort))
 
-if(komut=="GET"):
-    get(filename2)
-if(komut=="PUT"):
-    put(filename)
+#Linux'da zamanı değiştirme
+zamanekleme = datetime(zaman.year,zaman.month,zaman.day,zaman.hour,zaman.minute,zaman.second,zaman.microsecond+sonzaman).isoformat()
+subprocess.call(shlex.split("timedatectl set-ntp false"))
+subprocess.call(shlex.split("sudo date -s '%s'" % zamanekleme))
+subprocess.call(shlex.split("sudo hwclock -w"))
+

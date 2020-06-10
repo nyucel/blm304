@@ -1,51 +1,45 @@
 import socket
-import time
-import sys
 import os
+import sys
+import datetime
+import pickle
+import time
 
-IP = "127.0.0.1"
-PORT = 42
-
-def dosyala():
-    adlar = os.listdir()
-    liste = []
-    for dosya in adlar:
-        liste.append(dosya)
-    liste = str(liste)
-    liste = liste.encode()
-    print(liste)
-    sock.sendto(liste, (IP, PORT))
-
-def get(file_name):
-    f = open(file_name, "rb")
-    veri = f.read()
-    s.sendto(veri, (IP,PORT))
-    print("Dosya başarıyla alındı.")
-
-                
-def  put(file_name):
-    veri, address = sock.recvfrom(1024)
-    dosya = open(file_name, 'wb')
-    dosya.write(veri)
-    dosya.close()
-    print("Dosya başarıyla koyuldu.")
-        
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-print("bağlandı.")
-dosyala()
-
-komut,adr1=sock.recvfrom(1024)
-komut=komut.decode()
+host = "127.0.0.1"
+port = 142
 
 
-if(komut=="GET"):
-    filename, adr2 = sock.recvfrom(1024)
-    filename = filename.decode()
-    get(filename)
-elif(komut=="PUT"):
-    filename, adr2 = sock.recvfrom(1024)
-    filename = filename.decode()
-    put(filename)
+#Zamanı ve UTC'yi hesaplama bölümü
+greenwich=datetime.datetime.utcnow()
+zaman=datetime.datetime.now()
+baslangic=[zaman.hour,zaman.minute,zaman.second,zaman.microsecond]
+utc=zaman.hour-greenwich.hour
+if(utc>=0):
+    utc="UTC+" + str(utc)
+else:
+    utc="UTC" + str(utc)
+print(zaman,utc)
+
+#Zamanı liste haline getiriyoruz
+
+try:
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.bind((host, port))
+    print("socket {} nolu porta bağlandı".format(port))
+
+except socket.error as msg:
+    print("Hata:",msg)
+
+
+#Zamanı liste şeklinde istemci'ye yolluyoruz.
+s.listen(5)
+connection, client_address = s.accept()
+simdizaman=datetime.datetime.now()
+zamanliste=[simdizaman,utc]
+eleman=pickle.dumps(zamanliste)
+connection.send(eleman)
+
+
 
 
 
