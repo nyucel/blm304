@@ -1,4 +1,6 @@
 170401008 Arzu Tepe
+
+
 Sunucu Windows ve Linux'ta çalışır.
 İstemci ise sadece Linux'ta çalışır.
 
