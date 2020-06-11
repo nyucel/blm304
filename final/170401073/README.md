@@ -11,4 +11,4 @@
 # CLIENT
 * Client.py çalıştırıldığında istenen ip adresine sunucu.py nin çalıştırıldığı cihazın local ip adresi girilmelidir.
 * Ip adresi girildiğinde sunucudan,ayarlanması istenen utc değeri ve sunucunun zaman bilgisi alınır(milisaniye cinsinden).
-* Yaşanan gecikme hesaplanarak sunucudan alınan zaman bilgisinin üzerine eklenir ve bu değere göre istemci.py dosyasının çalıştırıldığı işletim sisteminin saati ayarlanır.
+* Yaşanan gecikme ve alınan utc değeri hesaplanarak sunucudan alınan zaman bilgisinin üzerine eklenir ve bu değere göre istemci.py dosyasının çalıştırıldığı işletim sisteminin saati ayarlanır.
