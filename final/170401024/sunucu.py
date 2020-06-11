@@ -50,9 +50,6 @@ while(True):
             msj = gecikme_son+gecikme
             mesj=str(msj.timestamp()*1000)
             data.send(str(mesj).encode())
-            
-            
-            
             break
     data.close()
 
