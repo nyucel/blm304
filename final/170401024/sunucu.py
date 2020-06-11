@@ -4,8 +4,8 @@ import socket
 from datetime import datetime
 import time
 
-#host = input("Sunucu ip adresini girin: ")
-host='192.168.1.36'
+host = input("Sunucu ip adresini girin: ")
+#host='192.168.1.36'
 port = 142
 
 offset='0'
