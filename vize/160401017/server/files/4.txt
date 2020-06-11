@@ -1,0 +1,48 @@
+add_payload(payload)
+add_underlayer(underlayer)
+aliastypes
+answers(other)
+build()
+build_done(p)
+build_padding()
+build_ps(internal=0)
+clear_cache()
+command()
+copy()
+delfieldval(attr)
+dissection_done(pkt)
+do_build()
+fragment(*args, **kargs)
+getfield_and_val(attr)
+getfieldval(attr)
+getlayer(cls, nb=1, _track=None, **flt)
+hashret()
+haslayer(cls, _subclass=None)
+hide_defaults()
+lastlayer(layer)
+layers()
+remove_payload()
+remove_underlayer(other)
+route()
+setfieldval(attr, val)
+show(indent=3, lvl='', label_lvl='')
+sprintf(fmt, relax)
+classscapy.packet.Packet
+Bases: scapy.base_classes.BasePacket, scapy.base_classes._CanvasDumpExtended
+
+add_payload(payload)
+add_underlayer(underlayer)
+aliastypes
+answers(other)
+DEV: true if self is an answer from other
+
+build()
+Create the current layer
+
+Returns
+string of the packet with the payload
+
+build_done(p)
+build_padding()
+build_ps(internal=0)
+canvas_dump(layer_shift=0, rebuild=1)
