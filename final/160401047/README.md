@@ -1,5 +1,4 @@
-----
-##Sunucu
+#Sunucu
 
 * Sunucu root yetkisi ile çalıştırılmalıdır.
 
@@ -10,8 +9,7 @@
 * TIMEZONE değişkeni `"UTC"` `"UTC+3"` `"UTC-2"` gibi değerler alabilir.
 
 
-----
-##İstemci
+#İstemci
 
 * İstemci başlatıldığında sunucuya bağlanmak için sunucunun adresi girilmelidir.
 
