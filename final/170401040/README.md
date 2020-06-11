@@ -1,3 +1,4 @@
+Medya Han 170401040
 # NETWORK TIME SERVER AND CLIENT
 
 - **networkTimeServer.py** çalıştırıldıktan sonra **networkTimeClient.py** çalıştırılır.
