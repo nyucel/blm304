@@ -35,7 +35,7 @@ print(time_now)
 t2 = time.time()
 tn = time_now.split(" ")
 ix = ((float(tn[0])) / 1000)
-iutc = (int(tn[2][4])) - getUtc() 
+iutc = (int(tn[2][3:])) - getUtc() 
 time_calc2 = ix + (iutc*3600)
 time_calc2 = time_calc2 + (int(t1)-int(t2))
 cmd = "timedatectl set-ntp false"
