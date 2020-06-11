@@ -6,4 +6,4 @@
   İstemci dosyası : içindeki `IP` ve `TPC_PORT` değişkenlerine sunucunun ip 'si ve kullandığımız `142` port numarası yazılmalıdır. Eğer     sunucu ip'si değişirse daha sonra tekrarnan `IP` değişkeni ile değiştirilebilir. Bu karşılaştırmayı `sunucu.py` dosyasından kontrol       edebilirsiniz. Sunucudan gelen yanıtı alan istemci "sunucu kod, çalışma sırası, algoritma mantığı ve 1024 kb verinin socket tarafından     gönderilmesi ortalama 2 saniye olarak geçikme süresini hesaplar". Sonrasında istemci gönderilen milisaniye değerini parçalayarak elde     ettiği saat bilgisini bilgisayarın saat bilgisi olarak ayarlar.
   
 # Kullanım sırası
-  Kullandığınız işletim sistemi terminalinden önce `sunucu.py` daha sonra `istemci.py` dosyasını çalıştırmanız gereklidir.
+  Kullandığınız işletim sistemi terminali üzerinden önce `sunucu.py` daha sonra `istemci.py` dosyasını çalıştırmanız gereklidir.
