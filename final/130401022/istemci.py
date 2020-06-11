@@ -25,6 +25,8 @@ def saatGuncelleWindows( millisecondsX):
     print("\n",datetime.fromtimestamp(millisecondsX/1000))
 
 def saatGuncelleLinux(millisecondsX):
+    millisecondsX = millisecondsX + 2*1000  #2 saniye
+    #gecikme milisaniye olarak hesaplandı
     linux_tarih_komut = datetime.fromtimestamp(millisecondsX/1000)
     os.system("sudo date --s  '%s'" % linux_tarih_komut)
     print("Saat : ",linux_tarih_komut)
