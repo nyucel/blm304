@@ -1,7 +1,7 @@
 * **sunucu.py** ve **istemci.py** dosyaları Linux ortamlarında çalıştırılmalıdır.
 * Her iki dosyada yönetici haklarıyla çalıştırılmalıdır.
 ## Sunucu
-* Sunucu 142. portu dinlemektedir.
+* Sunucu bağlantıyı TCP üzerinden sağlayarak, 142. portu dinlemektedir.
 * Sunucu bağlanan istemcilere zamanı milisaniye ve zaman bilgisini "UTC+3" şeklinde göndermektedir.
 * Sunucu bağlanan istemcilerin zamanlarını ayarlarken üzerinde çalıştığı işletim sisteminin zaman bilgisini kullanır.
 * **sunucu.py**'deki **UTC** değişkeni üzerinden zaman dilimi **"UTC+5"**, **"UTC-3"** şeklinde değiştirilebilir.
