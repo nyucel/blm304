@@ -1,5 +1,5 @@
 # blm304
-Veri Haberleşmesi - 
+Veri Haberleşmesi
 
 
 
