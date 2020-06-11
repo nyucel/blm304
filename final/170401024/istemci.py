@@ -31,7 +31,6 @@ msj=s.recv(1024)
 
 offset=s.recv(1024)
 offset=offset.decode()
-##print(offset)
 
 data=s.recv(1024)
 data=data.decode()
@@ -39,13 +38,9 @@ print("data: ",data)
 
 print(str(data)+' UTC'+str(offset))
 
-##tarih=s.recv(1024) 
-##tarih=tarih.decode()
-##print("tarihg: ",tarih) 
 
 a = float(data)/1000.0 
 
-##print("a: ",a)
 
 saat = datetime.datetime.fromtimestamp(a).strftime(frmt)
 print("Tarih ve Saat: ",saat)
