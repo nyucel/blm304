@@ -7,9 +7,9 @@ from datetime import datetime
 import time
 import datetime
 
-#host = input("Sunucu ip adresini girin: ")
+host = input("Sunucu ip adresini girin: ")
 
-host = '192.168.1.36'
+#host = '192.168.1.36'
 port = 142
 msg = "gecikme hesabi"
 
