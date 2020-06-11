@@ -16,10 +16,9 @@ import subprocess
 
 class client_paket_yoneticisi:
     # def __init__(self,server_ip,server_port=127,client_ip=IP(dst='1.1.1.1').src):
-    def __init__(self,server_ip,server_port=127,client_ip="1.1.1.1"):
+    def __init__(self,server_ip,server_port=127):
         self.server_ip=server_ip
         self.server_port=server_port
-        self.client_ip=client_ip
         self.baglanti = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.baglanti_durumu = 0
     def baglanti_kur(self):
@@ -116,7 +115,9 @@ class zaman_yoneticisi:
 
 
 if __name__ == "__main__":
-    client_py = client_paket_yoneticisi("192.168.0.105", 127)
+    #########################################################
+    client_py = client_paket_yoneticisi("192.168.0.105", 127)  #BURAYA SERVER İP Sİ GİRİLECEK.
+    #########################################################
     client_py.baglanti_kur()
     zy = zaman_yoneticisi(paket_yoneticisi=client_py)
     zy.zaman_istegi()
