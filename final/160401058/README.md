@@ -7,3 +7,8 @@ SUNUCU:
         Bağlanırsa saat bilgisini alıyor.
         Gecikmeyi de hesaplayıp saati değiştiriyor.
         Superuser olarak çalıştırılması gerekiyor.
+
+
+
+
+ENES DELİBALTA
