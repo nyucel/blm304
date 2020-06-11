@@ -1,7 +1,7 @@
 160401027 - Göksu Türker
 # Yapılandırma
 ## Sunucu
-----
+
 `server.py` dosyasında yapılandırma yapılacak kısım 14. satır ve 25. satır arasında.
 
 ### IP yapılandırma
@@ -27,7 +27,6 @@ Eğer sunucu **yazılımının** zaman diliminde **sistemin** zaman dilimini kul
 Sunucu yazılımı default olarak sistemin kullandığı zaman dilimini kullanır.
 
 ## İstemci
-----
 `client.py` dosyasında yapılandırma yapılacak kısım 7. satır ve 12. satır arasında.
 
 ### IP yapılandırma
@@ -38,8 +37,7 @@ Sunucu yazılımı default olarak sistemin kullandığı zaman dilimini kullanı
 
 # Kullanım
 ## Sunucu
-----
-Terminalden `sudo python3 server.py` komutuyla sunucu çalıştıralabilir.
+Terminalden `sudo python3 server.py` komutuyla sunucu çalıştırılabilir.
 
 ## İstemci
-Terminalden `sudo python3 client.py` komutuyla istemci çalıştıralabilir.
+Terminalden `sudo python3 client.py` komutuyla istemci çalıştırılabilir.
