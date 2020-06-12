@@ -9,7 +9,7 @@ import hashlib
 
 class FTPServer:
 
-    def __init__(self, ip="127.0.0.1", port=42, bufferSize=65535, Chunksize=60000):
+    def __init__(self, ip="127.0.0.1", port=42, bufferSize=65535, Chunksize=60000): ## sunucu adresi girilmezse localhost
         """Server için gerekli olacak değişkenleri ayarlıyorum"""
         self.UDP_IP = ip
         self.UDP_PORT = port
@@ -192,7 +192,7 @@ class FTPServer:
         else:
             self.send_simple_msg_to_client("600", address)
 
-    def TEST(self, address, data):
+    def TEST(self, address, data): 
         """Servere yollanan datayı echo yapıyor, 
         paketlerin düzgün yollanıp yollanamadığını kontrol etmek için"""
 
@@ -240,5 +240,5 @@ class FTPServer:
         self.ServerSocket.shutdown()
         self.ServerSocket.close()
 
-
-s = FTPServer()
+input_ip = input("Lütfen sunucunun oluşturulacağı ip adresini giriniz")
+s = FTPServer(ip=input_ip)
