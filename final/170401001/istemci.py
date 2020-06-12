@@ -44,14 +44,19 @@ eklenecek_sure=(gecen_sure/1000)/2
 #print(gelen_utc_offset)
 
 # Burda sunucudan gelen ms degerini ve zaman dilimini ayiriyoruz. 
-a = gelen_ms.decode()
-b = a.split('UTC+')[-1]
-ms = a.split('UTC+')[0]
-c = "UTC+" + b
-print("Sunucu zaman dilimi: ", c)
+#a = gelen_ms.decode()
+#b = a.split('UTC+')[-1]
+#ms = a.split('UTC+')[0]
+#c = "UTC+" + b
+#print("Sunucu zaman dilimi: ", c)
 #print("ms:", ms)
 #print("b:", b)
 #print("eklenecek_sure:", eklenecek_sure)
+
+ms = gelen_ms.decode()
+c = gelen_utc_offset.decode()
+print("Sunucu zaman dilimi: ", c)
+b = (c.split('UTC+')[-1])
 
 
 # INTERNET DELAY CORRECTION
