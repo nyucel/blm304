@@ -1,0 +1,28 @@
+KAA nedir ?
+
+TDA’yı belirli bir alandaki fiziksel veya çevresel koşulları izlemek için alan 
+içine dağıtılmış çok sayıda duyarga düğümden oluşan bir ağ olarak tanımlamak
+mümkündür.
+
+Telsiz Duyarga Ağ (TDA)’nın yapısı itibari ile yönlendirme işlemi diğer kablosuz
+ağlara göre  neden oldukça  zordur ?
+
+Bunun sebebi:
+
+- TDA’da çok sayıda duyarga düğümden oluşan bir ağ yapısı olması
+
+- TDA ağlarında kullanılan duyarga düğümleri enerjileri tükendiğinde veya 
+arızalandığında ağ topolojisi tamamen değişmekte bununla beraber verinin 
+iletileceği yol bilgileri de değişmektedir.
+
+- TDA’larda tipik iletişim ağlarının aksine birden fazla kaynaktan hedefe doğru 
+iletişim veya bir kaynaktan hedefe çoklu yollar üzerinden verinin gönderilmesi 
+söz konusu olabilmektedir.
+
+- TDA’larda kullanılan duyarga düğümlerin enerjilerinin, veri işleme ve depolama
+kapasitelerinin kısıtlı oluşu verinin iletimi için kullanılacak yönlendirme 
+sürecini zorlaştırmaktadır.
+
+
+
+
