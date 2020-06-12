@@ -2,9 +2,9 @@
 
 - Eğer linux kullanıyorsanız terminalden `$ sudo python3 server.py` komutuyla sunucuyu çalıştırılabilirsiniz.
 - Eğer Windows kullanıyorsanız 'komut istemi' yönetici olarak çalıştırmanız yeterlidir. 
-- Önce `sunucu.py` daha sonra `client.py` calıştırmanız gereklidir.
+- Önce `server.py` daha sonra `client.py` calıştırmanız gereklidir.
 - ìstemci dosyası içindeki `os.system("sudo date --s  '%s'" % linux)` kodunun çalışması için gerekli ayarlamaları yapmış olmanız gereklidir.
-- Linux terminalinden `sunucu.py` dosyasını `sudo` yetkisiyle açmanız yeterlidir.
+- Linux terminalinden `server.py` ve `client.py` dosyasını `sudo` yetkisiyle açmanız yeterlidir.
 
 - ### Sunucu :
   sunucu dosyası içersinde default olarak sunucu ip'si : `127.0.0.1` olarak girilmiştir.
