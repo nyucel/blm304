@@ -1,0 +1,14 @@
+ # SERVER - CLİENT 
+ - Linux'ta açtığımız terminale `sudo python3 server.py`  komutu yazdıktan sonra enter'a basarak çalıştırıyoruz. 
+ - IP alınır.
+ - UTC Kullanıcı tarafından alınır. 
+ - Server bu işlemlerden sonra başlatılmış olur.
+ - Client tarafına geçilerek `sudo python3 client.py`yazılır ve İstemci bu şekilde başlatılmış olur.
+ - Hedef Server IP adresi otomatik olarak girilmiştir. Burada + olarak bir giriş yapmaya gerek duyulmaz. (10.0.2.15)
+ - Server ın Cliente göndermesi gereken bir gecikme zamanı vardır. Bu gecikme zamanı Server içinde bir fonk içinde tanımlanır. 
+ - Gecikme zamanı ile Sistem saati toplanarak Cliente iletilir.
+ - Client Serverdan gelen saat bilgisini yakalar.
+ - Daha sonra saat güncellemesi yapılır.
+ - Server kapatılır.
+ - Client kapatılır.
+ - Zaman portları kapatılır.
