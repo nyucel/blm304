@@ -1,1 +1,0 @@
-Veri Haberleşmesi Vize Ödev

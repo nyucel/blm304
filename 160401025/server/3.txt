@@ -1,9 +1,0 @@
-Bilgisayar mimarı Gene Amdahl'ın ismini alan Amdahl Yasası, sistemin bir parçasının hızlandırılması sonucunda, sistemin bir bütün olarak ele alındığında toplam hızlanmasının ne olacağını hesaplamak için kullanılır. Sıklıkla, birden fazla işlemci kullanıldığında erişilebilecek azami hızlanmayı tahmin etmek için paralel hesaplamalarda da kullanılır.
-
-Amdahl Yasası'nın genelleştirilmiş hali:
-
-Burada;
-Pk: Hızlandırılacak ya da yavaşlatılacak buyrukların, tüm buyruklara oranı.
-Sk: Hızlandırma çarpanı. Bu çarpan için, 1 temel kabul edilir. Çarpan 1 olduğunda, hızlanma ya da yavaşlama yoktur.
-Her bir oran ve hızlandırma için bir etiket görevi görür.
-Sistem değişikliğinden kaynaklanan hızlanma veya yavaşlamaların sayısı.

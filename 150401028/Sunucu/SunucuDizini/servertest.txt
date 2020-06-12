@@ -1,1 +1,0 @@
-Bu dosya sunucuda bulunan bir test dosyasıdır.
