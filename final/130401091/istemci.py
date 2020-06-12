@@ -23,4 +23,4 @@ dizi = dizi[0].split("-")
 tarih = str(dizi[2]) + '/' + str(dizi[1]) + '/' + str(dizi[0])
 print("UTC = ", utc, "Saat = ", zaman, "Tarih = ", tarih)
 calistir = 'sudo date -s ' + '"' + str(tarih) + ' ' + str(zaman) + '"'
-os.system(komut)
+os.system(calistir)
