@@ -16,7 +16,7 @@ def set_time(date):
     subprocess.call(shlex.split("sudo hwclock -w"))
 
 
-IP = '127.0.0.1'
+IP = input("Sunucunun IP adresini giriniz: ")
 PORT = 142
 BUFFER_SIZE = 1024
 
