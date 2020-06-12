@@ -1,17 +1,31 @@
-# Running the Server
+# Start the Server
 
-./server.py --start 
-===================
+#### Start the server with default TIMEZONE="UTC+3"
 
-./server.py --stop
-==================
+sudo ./start_server.py
+======================
+
+#### Or start the server with a specific timezone 
+
+sudo ./timeserver.py --timezone UTC-2 --start 
+=============================================
+
+# Stop the server
+
+sudo ./stop_server.py 
+=====================
+ or 
+ 
+sudo ./timeserver.py --stop
+===========================
+
 
 # Running the Client
 
 
-./myftp.py  -r HOST -p PORT
-===========================
+sudo ./ntpclient.py  -r HOST -p PORT
+====================================
 
 HOST defaults to 127.0.0.1
 
-PORT defaults to 42
+PORT defaults to 142
