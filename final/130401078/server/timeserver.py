@@ -20,7 +20,7 @@ from socketserver import TCPServer
 from socketserver import StreamRequestHandler
 
 HOST = "127.0.0.1"
-PORT = 10020
+PORT = 142
 
 TIMEZONE = "UTC+3"   # Zaman dilimi degiskeni
 

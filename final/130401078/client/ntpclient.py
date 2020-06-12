@@ -20,7 +20,7 @@ from datetime import datetime
 from datetime import timezone
 
 HOST = "127.0.0.1"
-PORT = 10020
+PORT = 142
 
 NTP_DATA_PACKET ='0x1b' + 47*'\0' # Hex message to send to the server.
 
