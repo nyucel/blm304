@@ -3,7 +3,7 @@ from datetime import datetime, timezone, timedelta
 # 170401016
 
 class Server:
-    def __init__(self, timezone=0, buffersize=256, server_ip):
+    def __init__(self, timezone=0, buffersize=256):
         self.host = '0.0.0.0'  # socket.gethostbyname(socket.gethostname())
         self.port = 142
         self.buffer_size = buffersize
