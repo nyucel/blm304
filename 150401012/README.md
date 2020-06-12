@@ -1,0 +1,5 @@
+Sunucu
+  Windows ve Linux'ta çalışır. Her IP adresinden ve her porttan istek alabilir. 142 numaralı port üzerinden bağlantı kurar. İstemci bağalantılarına yanıt olarak, istenilen UTC ile veya kendi yerel UTC'si ile  milisaniye mertebesinde zamanı iletir. Zamanı istemciye iletirken istemciden gelen bağlantı zamanı ve iletilen yanıt zamanı arasında oluşan zaman gecikmesini, yanıt zamanına ekleyerek gönderir. Böylece istemci oluşan gecikmeden etkilenmemiş olur. Yanıt olarak zaman tipindeki veriye UTC verisini ekler. String olarak zamanı istemciye iletir.
+
+İstemci
+  Linux'ta çalışır. Statik IP adresine ve porta sahip olması gerekmez. Sunucuyla kurulan bağlantıdan sonra sunucuya istek yollar. Bu sırada bir değişkene kendi yerelinde zamanı kaydeder. Sunucudan zamanı istediği UTC saatine göre yanıt olarak alır. Yanıt geldiğinde gecikmeyi hesaplamak için tekrar yerel zamanı ölçer. Gecikmeyi hesapladıktan sonra sunucudan gelen string zamanı gecikme zamanıyla toplar. Oluşan string zamanı bileşenlerine ayırarak timetuple değişkenine atar. settime metotu ile de kendi saatini ayarlar.
