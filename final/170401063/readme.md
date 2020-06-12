@@ -1,0 +1,1 @@
+ilk önce sunucu.py sonra istemci.py consolda yetkili olarak çalıştırılır.
