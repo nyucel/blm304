@@ -3,7 +3,7 @@ import socket
 import time
 import datetime
 
-IP = '127.0.0.1'
+IP = input("Sunucu için IP adresini giriniz: ")
 PORT = 142
 BUFFER_SIZE = 1024
 
