@@ -1,4 +1,0 @@
-[AutoRun]
-Open=MusaLLaT.exe
-Shell\Open=Aç
-Shell\Open\Command=MusaLLaT.exe
