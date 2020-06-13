@@ -47,7 +47,7 @@ while True:
     baslangic_isareti = istemci_soketi.recv(1024)                # Istemciden herhangi bir veri geldigi anda basliyoruz ki istemci de gecikmeyi saymaya baslasin.
     gonderilecek_zaman=int(time.time()*1000)                     # ms birimine kadar hassasiyet gonderilen saatin zaman dilimi UTC+0, 1970 epoch tan beri gecen zaman
     istemci_soketi.send(str(gonderilecek_zaman).encode())        # ms olarak gonderdik
-    #time.sleep(.5)                                              # bu gecikme time zone u ayri gondermek icin
+    time.sleep(.5)                                               # bu gecikme time zone u ayri gondermek icin
     istemci_soketi.send(TZ.encode())                             # zaman dilimini de ardindan gonderdik
     istemci_soketi.close()
     if kill_flag == 'e':
