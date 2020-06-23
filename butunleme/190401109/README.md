@@ -20,5 +20,7 @@ kullanarak kaynak ve hedef makinelerinin arasındaki yönlendiricileri bulmaktad
 Yani kaynak makineden hedef makineye ulaşmak için paket hangi yönlendiricilerden
 geçtiğini bulmaktadır.
 
+# Ancak  program paket hedef makineye ulaştığını nasıl anlayacak?
 
-Örneğin, sudo ./rota.py 8.8.8.8 komutu çalıştırıldığında
+Rota programı bunun hakkında bilgi sahibi olacaktır, çünkü paketin orijinal alıcısı (hedef makine) talebi aldığında gelen ICMP yanıtı "**TTL Time exceeded**" mesajından tamamen farklı bir ICMP mesajı (**ICMP Destination/PORT Unreachable**) gönderecektir. Ayrıca cevap olarak gelen ICMP paketin kaynak ip adresi hedef makinenin ip adresi ile eşit olamlıdır.
+
