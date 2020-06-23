@@ -43,7 +43,9 @@ Program hem rota.txt doasyasina çıktısını yazar hem de stdout (ekrana) yazm
 
 ## Örnek
 
-sudo ./rota.py facebook.com
+#### sudo ./rota.py facebook.com
+
+Çıktısı:
 
 route packets trace to facebook.com (69.171.250.35), 30 hops max, 28 byte packets
 
