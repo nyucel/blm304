@@ -40,7 +40,7 @@ TTL: 13, IP 81.8.12.82
 TTL: 14, IP 193.255.0.14
 ```
 ## Ekran Görüntüsü
-![alt text](https://im2.ezgif.com/tmp/ezgif-2-ecd4fecfac23.gif)
+![alt text](https://im2.ezgif.com/tmp/ezgif-2-c28ef977d470.gif)
 
 ## Güncellemeler
 23.06.2020 - İlk.
