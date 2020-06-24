@@ -51,7 +51,7 @@ class Rota(object):
                         icmp_msg, addr = self.recv_sock.recvfrom(1024)
                         end_t = time.time()
                         rtt = end_t - start_t # Round Trip Time (RTT) hesaplanması
-                        rtt = "%.4f" % rtt
+                        rtt = "%.4f" % (rtt*1000)
                         if addr:
                             rota_file.write("TTL = {:<4} {} ({}) rtt = {} ms\n".format(self.TTL,socket.gethostbyaddr(addr[0])[0],addr[0],rtt))
                             print("TTL = {:<3} {} ({}) rtt = {} ms".format(self.TTL,socket.gethostbyaddr(addr[0])[0],addr[0],rtt))
