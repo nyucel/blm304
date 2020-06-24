@@ -60,7 +60,7 @@ class Rota(object):
                             rota_file.write("TTL={:<4} ***".format(self.TTL))
                             print("TTL={:<3} ***".format(self.TTL))
                     except socket.herror as error:
-                        if error.errno == 1:  # Unknown Host hatası olduğunda
+                        if error.errno == 1 or error.errno == 2:  # Unknown Host hatası olduğunda
                             rota_file.write("TTL = {:<4} {} ({}) rtt = {} ms\n".format(self.TTL,addr[0],addr[0],rtt))
                             print("TTL = {:<3} {} ({}) rtt = {} ms".format(self.TTL,addr[0],addr[0],rtt))
                         else:
