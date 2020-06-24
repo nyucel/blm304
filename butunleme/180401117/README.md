@@ -5,3 +5,5 @@ Yazdığım rota.py programı TTL (Time To Live) değerlerini kullanarak çalı�
 Çalıştırılması için aşağıdaki komut çalıştırmak yeterlidir:
 
 # sudo rota.py github.com
+
+Çıktısı da rota.txt dosyanın içine yazılmaktadır.
