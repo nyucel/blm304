@@ -72,7 +72,7 @@ class Rota(object):
                     self.TTL += 1
                     if addr[0] == dest_ip or self.TTL > self.hops:
                         control = False
-            print("\ntrace completed, rota.py output >> rota.txt")
+            print("\ntrace completed successfully, rota.py output >> rota.txt")
         except Exception as ex:
             print(str(ex))
             sys.exit(1)
