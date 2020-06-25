@@ -41,7 +41,8 @@ TTL: 14, IP 193.255.0.14
 ```
 
 ## Güncellemeler
-23.06.2020 - İlk
+23.06.2020 
+* İlk
 
 25.06.2020
 * Konsolda yazdırma eklendi.
