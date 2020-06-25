@@ -15,19 +15,30 @@ ttl = 1
 f = open('rota.txt', 'w')
 f.write('Site: %s\n' % sys.argv[1])
 
-# 30 yönlendiriciye kadar deneme yapılmalıdır.
+print("Site: ", sys.argv[1])
+
 i = 0
-while (i < 30):
-    p = sr1(IP(dst=sys.argv[1], ttl=ttl) / ICMP(id=os.getpid()), verbose=0)
+try:
+    # 30 yönlendiriciye kadar deneme yapılmalıdır.
+    for i in range (30):
+        p = sr1(IP(dst=sys.argv[1], ttl=ttl) /
+                ICMP(id=os.getpid()), verbose=0, retry=1, timeout=1)
+        
+        # Zaman aşımı
+        # Tüm ICPM komutları için -> iana.org/assignments/icmp-parameters/icmp-parameters.xhtml
+        if (p[ICMP].type == 11 and p[ICMP].code == 0):
+            print('TTL: ', ttl, "- IP: ", p.src)
+            f.write('TTL: %s - IP %s\n' % (ttl, p.src))
+            ttl += 1
+            i += 1
 
-    # Süre aşımı durumunda
-    if p[ICMP].type == 11 and p[ICMP].code == 0:
-        f.write('TTL: %s, IP %s\n' % (ttl, p.src))
-        ttl += 1
-        i += 1
-    elif p[ICMP].type == 0:
-        f.write('TTL: %s, IP %s\n' % (ttl, p.src))
-        i += 1
-        break
-
-f.close()
+        elif (p[ICMP].type == 0):
+            print('TTL: ', ttl, "- IP: ", p.src)
+            f.write('TTL: %s - IP %s\n' % (ttl, p.src))
+            i += 1
+            break
+except:
+    pass
+finally: 
+    print("Dosya yazdırma tamamlandı.")
+    f.close()

@@ -39,8 +39,12 @@ TTL: 12, IP 31.145.74.161
 TTL: 13, IP 81.8.12.82
 TTL: 14, IP 193.255.0.14
 ```
-## Ekran Görüntüsü
-![alt text](https://im2.ezgif.com/tmp/ezgif-2-c28ef977d470.gif)
 
 ## Güncellemeler
-23.06.2020 - İlk.
+23.06.2020 
+* İlk
+
+25.06.2020
+* Konsolda yazdırma eklendi.
+* try, except olarak yeniden düzenlendi.
+* 30 yönlendirici sınırı for döngüsü ile yeniden yazıldı.
