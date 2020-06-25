@@ -33,17 +33,17 @@ Rota programı bunun hakkında bilgi sahibi olacaktır, çünkü paketin orijina
 
 Aşağdaki gibi kullanılmaktadır.
 
-### sudo ./rota.py google.com 
+### sudo python3 ./rota.py google.com 
 
 veya
 
-### sudo ./rota.py 8.8.8.8
+### sudo python3 ./rota.py 8.8.8.8
 
 Program hem rota.txt doasyasina çıktısını yazar hem de stdout (ekrana) yazmaktadır.
 
 ## Örnek
 
-#### sudo ./rota.py facebook.com
+#### sudo python3 ./rota.py facebook.com
 
 Çıktısı:
 
