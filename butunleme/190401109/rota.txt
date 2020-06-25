@@ -1,0 +1,10 @@
+TTL = 1    onyxgateway.intranet (192.168.1.1) rtt = 1.6527 ms
+TTL = 2    195.87.128.9 (195.87.128.9) rtt = 17.6127 ms
+TTL = 3    31.155.48.213 (31.155.48.213) rtt = 17.9172 ms
+TTL = 4    ae3-17-ucr1.ese.cw.net (195.2.23.153) rtt = 18.9788 ms
+TTL = 5    ae1-ucr1.bch.cw.net (195.2.8.61) rtt = 27.9608 ms
+TTL = 6    ae1-xcr1.bcp.cw.net (195.2.27.201) rtt = 28.9767 ms
+TTL = 7    ae3.pr04.otp1.tfbnw.net (157.240.71.156) rtt = 49.0193 ms
+TTL = 8    po106.psw04.otp1.tfbnw.net (157.240.51.203) rtt = 28.8939 ms
+TTL = 9    173.252.67.163 (173.252.67.163) rtt = 28.9855 ms
+TTL = 10   edge-star-mini-shv-01-any2.facebook.com (69.171.250.35) rtt = 28.9469 ms
