@@ -17,7 +17,8 @@ import random
 HOPS_MAX = 30  # maksimum 30 yönlendiriciye kadar deneme yapılcaktır.
 
 def get_rand_port():
-    return random.choice(range(33434,33535))  # rastgele olarak 33434-33535 arasında bir port numarası seçilir
+    unused_ports = range(33434,33535)
+    return random.choice(unused_ports)  # rastgele olarak 33434-33535 arasında bir port numarası seçilir
 
 class Rota(object):
     def __init__(self,dest,hops):
@@ -25,30 +26,24 @@ class Rota(object):
         self.hops = hops
         self.dest = dest
         self.port = get_rand_port()
-        self.payload = bytes("Big Bang Boommmmmmmmmmmmm!!!","utf-8")
-        self.send_sock = socket.socket(
-                         family=socket.AF_INET,
-                         type=socket.SOCK_DGRAM,
-                         proto=socket.IPPROTO_UDP)
+        self.payload = bytes("Bigggggggggg Banggggggggg Boommmmmmmmmmmmm!!!","utf-8") # Karşıya gönderilecek dump verisi
+        self.dgram_sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM,socket.IPPROTO_UDP) # UDP packeti gödermek için
+        self.raw_sock = socket.socket(socket.AF_INET,socket.SOCK_RAW,socket.IPPROTO_ICMP) # Hedef makineden ICMP mesajları almak için
+        self.raw_sock.bind(('', self.port))
+        self.raw_sock.settimeout(1.5)
 
-        self.recv_sock = socket.socket(family=socket.AF_INET,
-                                       type=socket.SOCK_RAW,
-                                       proto=socket.IPPROTO_ICMP)
-        self.recv_sock.bind(('', self.port))
-        self.recv_sock.settimeout(1)
-
-    def traceroute(self):
+    def get_route_packets_trace(self):
         try:
             dest_ip = socket.gethostbyname(self.dest)
             print("route packets trace to {} ({}), {} hops max, {} byte packets".format(self.dest,dest_ip,self.hops,len(self.payload)))
             control = True
-            with self.send_sock, self.recv_sock, open("rota.txt","w") as rota_file:
+            with self.dgram_sock, self.raw_sock, open("rota.txt","w") as rota_file:
                 while control:
-                    self.send_sock.setsockopt(socket.SOL_IP, socket.IP_TTL, self.TTL)
+                    self.dgram_sock.setsockopt(socket.SOL_IP, socket.IP_TTL, self.TTL)
                     start_t = time.time()
-                    self.send_sock.sendto(self.payload,(self.dest,self.port))
+                    self.dgram_sock.sendto(self.payload,(self.dest,self.port))
                     try:
-                        icmp_msg, addr = self.recv_sock.recvfrom(1024)
+                        icmp_msg, addr = self.raw_sock.recvfrom(1024)
                         end_t = time.time()
                         rtt = end_t - start_t # Round Trip Time (RTT) hesaplanması
                         rtt = "%.4f" % (rtt*1000)
@@ -78,14 +73,13 @@ class Rota(object):
             sys.exit(1)
 
 
-
-def run(argv):
+def run_rota_tracer(argv):
     if len(argv) > 0:
         rota = Rota(argv[0], HOPS_MAX)
-        rota.traceroute()
+        rota.get_route_packets_trace()
     else:
-        print("Kullanım: rota.py HOSTNAME")
-        print("Örnek: rota.py www.comu.edu.tr")
+        print("kullanım: rota.py HOSTNAME")
+        print("orn: rota.py www.comu.edu.tr")
 
 if __name__ == "__main__":
-    run(sys.argv[1:])
+    run_rota_tracer(sys.argv[1:])
