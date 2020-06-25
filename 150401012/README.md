@@ -1,5 +1,6 @@
-Sunucu
-  Windows ve Linux'ta çalışır. Her IP adresinden ve her porttan istek alabilir. 142 numaralı port üzerinden bağlantı kurar. İstemci bağalantılarına yanıt olarak, istenilen UTC ile veya kendi yerel UTC'si ile  milisaniye mertebesinde zamanı iletir. Zamanı istemciye iletirken istemciden gelen bağlantı zamanı ve iletilen yanıt zamanı arasında oluşan zaman gecikmesini, yanıt zamanına ekleyerek gönderir. Böylece istemci oluşan gecikmeden etkilenmemiş olur. Yanıt olarak zaman tipindeki veriye UTC verisini ekler. String olarak zamanı istemciye iletir.
-
-İstemci
-  Linux'ta çalışır. Statik IP adresine ve porta sahip olması gerekmez. Sunucuyla kurulan bağlantıdan sonra sunucuya istek yollar. Bu sırada bir değişkene kendi yerelinde zamanı kaydeder. Sunucudan zamanı istediği UTC saatine göre yanıt olarak alır. Yanıt geldiğinde gecikmeyi hesaplamak için tekrar yerel zamanı ölçer. Gecikmeyi hesapladıktan sonra sunucudan gelen string zamanı gecikme zamanıyla toplar. Oluşan string zamanı bileşenlerine ayırarak timetuple değişkenine atar. settime metotu ile de kendi saatini ayarlar.
+Komut satırında "sudo python3 rota.py hedef_adres" olacak şekilde ulaşılmak istenilen adres girilir.
+Yönlendiricilere ulaşmak için soket oluşturulur. Paket göndermek için UDP, almak için ICMP kullanılır.
+Yönlendirici aldığı UDP paketindeki hedef adresin kendisi olup olmadığını kontrol eder ve geriye ICMP paketi gönderir. Eğer hedef_adres kendisi değilse balka bir yönlendiriciye paket gönderir, ttl 1 arttırılır.
+Ana makineden sonra paket, en fazla 30 yönlendiriciye ulaşabilir. ttl 30 olduktan sonra paket düşürülür.
+Her yönlendiriciden geçişte ekrana ttl numarasıyla birlikte yönlendirici adresi ve adresin ismi yazılır. Ayrıca rota.txt adlı dosyaya yönlendiricinin adresi yazılır.
+hedef_adres'e ulaşıldığında rota.txt dosyası kapatılır ve program sonlanır.
