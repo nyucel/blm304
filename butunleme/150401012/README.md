@@ -6,3 +6,4 @@ Yönlendirici aldığı UDP paketindeki hedef adresin kendisi olup olmadığın�
 Ana makineden sonra paket, en fazla 30 yönlendiriciye ulaşabilir. ttl 30 olduktan sonra paket düşürülür.
 Her yönlendiriciden geçişte ekrana ttl numarasıyla birlikte yönlendirici adresi ve adresin ismi yazılır. Ayrıca rota.txt adlı dosyaya yönlendiricinin adresi yazılır.
 hedef_adres'e ulaşıldığında rota.txt dosyası kapatılır ve program sonlanır.
+hedef_adres'e ulaşıldığında rota.txt dosyası kapatılır ve program sonlanır.
