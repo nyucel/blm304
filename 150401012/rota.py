@@ -33,7 +33,7 @@ def trace(destinationname):
             receiver.close()
 
         if currentaddress is not None:
-            currenthost = currentname, " ", currentaddress
+            currenthost = str(currentname), " ", str(currentaddress)
         else:
             currenthost = "*"
         print(ttl,"\t" currenthost)
