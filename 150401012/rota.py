@@ -37,7 +37,7 @@ def trace(destinationname):
         else:
             currenthost = "*"
         print(ttl,"\t" currenthost)
-        file.write(currentaddress"\n")
+        file.write(str(currentaddress)"\n")
 
         ttl += 1
         if currentaddress == destinationaddress or ttl > hops:
