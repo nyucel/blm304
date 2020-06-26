@@ -1,0 +1,5 @@
+-Parametre olarak gönderilen hedef adres adının ilk olarak ip adresi bulundu.
+-Gönderilecek ve alınacak paketler için soketler oluşturuldu.
+-Gönderilecek paketler için UDP, alınan paketler için ICMP kullanıldı.
+-Tüm kod while döngüsüne alındı ve paket hedefe ulaşana yada 30 kere döngüye girene kadar devam eder.
+-curr_addr değişkeni ile ttl değerindeki yönlendiricinin ip adresini tutar. Cevap gelmez ise dosyada "*" koyarak giğer adıma geçer.
