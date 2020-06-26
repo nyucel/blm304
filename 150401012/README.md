@@ -1,3 +1,5 @@
+150401012 Yiğit Yüre
+
 Komut satırında "sudo python3 rota.py hedef_adres" olacak şekilde ulaşılmak istenilen adres girilir.
 Yönlendiricilere ulaşmak için soket oluşturulur. Paket göndermek için UDP, almak için ICMP kullanılır.
 Yönlendirici aldığı UDP paketindeki hedef adresin kendisi olup olmadığını kontrol eder ve geriye ICMP paketi gönderir. Eğer hedef_adres kendisi değilse balka bir yönlendiriciye paket gönderir, ttl 1 arttırılır.
