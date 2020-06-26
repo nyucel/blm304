@@ -36,7 +36,7 @@ def trace(destinationname):
             currenthost = str(currentname), " ", str(currentaddress)
         else:
             currenthost = "*"
-        print(ttl,"\t" currenthost)
+        print(ttl,"\t" currenthost"\n")
         file.write(str(currentaddress)"\n")
 
         ttl += 1
